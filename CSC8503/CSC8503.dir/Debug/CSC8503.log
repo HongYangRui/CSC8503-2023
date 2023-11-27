@@ -1,8 +1,8 @@
 ﻿  cmake_pch.cxx
   GameTechRenderer.cpp
   Main.cpp
-  NetworkedGame.cpp
   NetworkPlayer.cpp
+  NetworkedGame.cpp
   StateGameObject.cpp
   TutorialGame.cpp
   Generating Code...
