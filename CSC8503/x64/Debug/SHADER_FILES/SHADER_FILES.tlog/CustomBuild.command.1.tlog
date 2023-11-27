@@ -1,0 +1,118 @@
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\DEBUG.FRAG.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Debug.frag" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Debug.frag.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\DEBUG.VERT.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Debug.vert" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Debug.vert.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\DEBUGTEXT.FRAG.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/DebugText.frag" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/DebugText.frag.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\DEBUGTEXT.VERT.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/DebugText.vert" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/DebugText.vert.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SHADOW.VERT.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Shadow.vert" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/Shadow.vert.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SCENE.FRAG.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/scene.frag" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/scene.frag.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SCENE.VERT.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/scene.vert" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/scene.vert.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SHADOW.FRAG.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/shadow.frag" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/shadow.frag.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SKYBOX.FRAG.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/skybox.frag" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/skybox.frag.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\FD3C8F00DC32F02C4417855CC7E59CDA\SKYBOX.VERT.SPV.RULE
+setlocal
+C:\VulkanSDK\1.3.268.0\Bin\glslangValidator.exe -V "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/skybox.vert" -o "C:/Users/c2013448/CSC8503 2023/Assets/Shaders/VK/skybox.vert.spv"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CMAKEFILES\44FB95B8216ADB0E35CA524A1CC8E92A\SHADER_FILES.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\C2013448\CSC8503 2023\CSC8503\CMAKELISTS.TXT
+setlocal
+C:\Users\c2013448\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe "-SC:/Users/c2013448/CSC8503 2023" "-BC:/Users/c2013448/CSC8503 2023" --check-stamp-file "C:/Users/c2013448/CSC8503 2023/CSC8503/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

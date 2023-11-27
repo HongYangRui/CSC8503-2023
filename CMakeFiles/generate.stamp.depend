@@ -1,0 +1,22 @@
+# CMake generation dependency list for this directory.
+C:/Users/c2013448/CSC8503 2023/CMake/Utils.cmake
+C:/Users/c2013448/CSC8503 2023/CMakeFiles/3.28.0-rc5/CMakeCXXCompiler.cmake
+C:/Users/c2013448/CSC8503 2023/CMakeFiles/3.28.0-rc5/CMakeRCCompiler.cmake
+C:/Users/c2013448/CSC8503 2023/CMakeFiles/3.28.0-rc5/CMakeSystem.cmake
+C:/Users/c2013448/CSC8503 2023/CMakeLists.txt
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeCXXInformation.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeCommonLanguageInclude.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeGenericSystem.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeInitializeConfigs.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeLanguageInformation.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeRCInformation.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeSystemSpecificInformation.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Compiler/MSVC-CXX.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Compiler/MSVC.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Platform/Windows-Initialize.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Platform/Windows-MSVC.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Platform/Windows.cmake
+C:/Users/c2013448/cmake-3.28.0-rc5-windows-x86_64/share/cmake-3.28/Modules/Platform/WindowsPaths.cmake
