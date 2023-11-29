@@ -7,7 +7,7 @@ namespace NCL {
 
 		class PositionConstraint : public Constraint	{
 		public:
-			PositionConstraint(GameObject* a, GameObject* b, float d);
+			PositionConstraint(GameObject* a, GameObject* b, float d) ;
 			~PositionConstraint();
 
 			void UpdateConstraint(float dt) override;
