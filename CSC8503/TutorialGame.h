@@ -19,6 +19,10 @@ namespace NCL {
 			virtual void UpdateGame(float dt);
 
 		protected:
+			//statemachine
+			StateGameObject* AddStateObjectToWorld(const Vector3& position);
+			StateGameObject* testStateObject;
+
 			void InitialiseAssets();
 
 			void InitCamera();

@@ -20,7 +20,7 @@ StateMachine::~StateMachine()	{
 void StateMachine::AddState(State* s) {
 	allStates.emplace_back(s);
 	if (activeState == nullptr) {
-		activeState = s;
+		activeState = s;//make this the default entry state!
 	}
 }
 
@@ -34,9 +34,9 @@ void StateMachine::Update(float dt) {
 	
 		//Get the transition set starting from this state node;
 		std::pair<TransitionIterator, TransitionIterator> range = allTransitions.equal_range(activeState);
-
+		//Iterate through them all
 		for (auto& i = range.first; i != range.second; ++i) {
-			if (i->second->CanTransition()) {
+			if (i->second->CanTransition()) {//some transition is true!
 				State* newState = i->second->GetDestinationState();
 				activeState = newState;
 			}

@@ -173,15 +173,15 @@ void PhysicsSystem::UpdateCollisionList() {
 		}
 	}
 }
-
+//tutorial 1
 //void PhysicsSystem::UpdateObjectAABBs() {
-//	gameWorld.OperateOnContents(
-//		[](GameObject* g) {
+//	gameWorld.OperateOnContents([](GameObject* g) {
 //			g->UpdateBroadphaseAABB();
 //		}
 //	);
 //}
 
+//toturial 7 
 void PhysicsSystem::UpdateObjectAABBs() {
 	std::vector<GameObject*>::const_iterator first;
 	std::vector<GameObject*>::const_iterator last;
