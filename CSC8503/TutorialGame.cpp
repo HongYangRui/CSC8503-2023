@@ -41,26 +41,6 @@ TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *
 	InitialiseAssets();
 }
 
-StateGameObject* NCL::CSC8503::TutorialGame::AddStateObjectToWorld(const Vector3& position)
-{
-	StateGameObject* apple = new StateGameObject();
-
-	SphereVolume* volume = new SphereVolume(0.5f);
-	apple->SetBoundingVolume((CollisionVolume*)volume);
-	apple->GetTransform()
-		.SetScale(Vector3(4, 4, 4))
-		.SetPosition(position);
-
-	apple->SetRenderObject(new RenderObject(&apple->GetTransform(), bonusMesh, nullptr, basicShader));
-	apple->SetPhysicsObject(new PhysicsObject(&apple->GetTransform(), apple->GetBoundingVolume()));
-
-	apple->GetPhysicsObject()->SetInverseMass(1.0f);
-	apple->GetPhysicsObject()->InitSphereInertia();
-
-	world->AddGameObject(apple);
-
-	return apple;
-}
 
 
 
@@ -294,7 +274,7 @@ void TutorialGame::InitWorld() {
 	InitDefaultFloor();
 	BridgeConstraintTest();
 	//statemachine
-	testStateObject = AddStateObjectToWorld(Vector3(0, 10, 0));
+	testStateObject = AddStateObjectToWorld(Vector3(0, 50, 0));
 }
 
 /*
@@ -439,6 +419,27 @@ GameObject* TutorialGame::AddBonusToWorld(const Vector3& position) {
 	world->AddGameObject(apple);
 
 	return apple;
+}
+
+StateGameObject* TutorialGame::AddStateObjectToWorld(const Vector3& position)
+{
+	StateGameObject* banana = new StateGameObject();
+
+	SphereVolume* volume = new SphereVolume(0.5f);
+	banana->SetBoundingVolume((CollisionVolume*)volume);
+	banana->GetTransform()
+		.SetScale(Vector3(4, 4, 4))
+		.SetPosition(position);
+
+	banana->SetRenderObject(new RenderObject(&banana->GetTransform(), sphereMesh, nullptr, basicShader));
+	banana->SetPhysicsObject(new PhysicsObject(&banana->GetTransform(), banana->GetBoundingVolume()));
+
+	banana->GetPhysicsObject()->SetInverseMass(1.0f);
+	banana->GetPhysicsObject()->InitSphereInertia();
+
+	world->AddGameObject(banana);
+
+	return banana;
 }
 
 
