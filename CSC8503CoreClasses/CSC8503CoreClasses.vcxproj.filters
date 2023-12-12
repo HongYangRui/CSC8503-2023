@@ -187,6 +187,18 @@
     <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\PhysicsSystem.h">
       <Filter>Physics</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HingeConstraint.h">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HingeConstraint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HeightConstraint.h">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HeightConstraint.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\enet\callbacks.c">
       <Filter>eNet</Filter>
     </ClCompile>

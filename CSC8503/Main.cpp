@@ -24,6 +24,9 @@
 #include "BehaviourSequence.h"
 #include "BehaviourAction.h"
 
+//#include "LevelOne.h"
+//#include "MainMenu.h"
+
 using namespace NCL;
 using namespace CSC8503;
 
@@ -194,33 +197,42 @@ class PauseScreen : public PushdownState {
 };
 
 class GameScreen : public PushdownState {
-	PushdownResult OnUpdate(float dt, PushdownState** newState)override {
-		pauseReminder -= dt;
-		if (pauseReminder<0 ) {
-			std::cout << "Coins mined:" << coinsMined << "\n";
-			std::cout << "Press P to pause game,or F1 to return to main menu!\n";
-			pauseReminder += 1.0f;
+	 PushdownResult OnUpdate(float dt,
+		 PushdownState * *newState) override {
+		 pauseReminder -= dt;
+		 if (pauseReminder < 0) {
+			 std::cout << " Coins mined : " << coinsMined << "\n";
+			 std::cout << " Press P to pause game , or F1 to return to main menu !\n";
+				 pauseReminder += 1.0f;
+			
 		}
-		if (Window::GetKeyboard()->KeyDown(KeyCodes::P)) {
-			*newState = new PauseScreen();
-			return PushdownResult::Push;
+		 if (Window::GetKeyboard() -> KeyDown(KeyCodes::P)) {
+			 * newState = new PauseScreen();
+			 return PushdownResult::Push;
+			
 		}
-		if (Window::GetKeyboard()->KeyDown(KeyCodes::F1)) {
-			std::cout << "Returning to main menu!\n";
-			return PushdownResult::Pop;
+		 if (Window::GetKeyboard() -> KeyDown(KeyCodes::F1)) {
+			 std::cout << " Returning to main menu !\n";
+			 return PushdownResult::Pop;
+			
 		}
-		if (rand() % 7 == 0) {
-			coinsMined++;
+		 if (rand() % 7 == 0) {
+			 coinsMined++;
+			
 		}
-		return PushdownResult::NoChange;
+		 return PushdownResult::NoChange;
+		
 	};
-	void OnAwake()override {
-		std::cout << "Preparing to mine coins!\n";
+	 void OnAwake() override {
+		 std::cout << " Preparing to mine coins !\n";
+		
 	}
-protected:;
-		 int coinsMined = 0;
-		 float pauseReminder = 1;
+ protected:
+	 int coinsMined = 0;
+	 float pauseReminder = 1;
 };
+
+
 class IntroScreen :public PushdownState {
 	PushdownResult OnUpdate(float dt, PushdownState** newState)override {
 		if (Window::GetKeyboard()->KeyPressed(KeyCodes::SPACE)) {
@@ -237,6 +249,7 @@ class IntroScreen :public PushdownState {
 		std::cout << "Press Space To Begin or escape to quit!\n";
 	}
 };
+
 void TestPushdownAutomata(Window* w) {
 	PushdownMachine machine(new IntroScreen());
 	while (w->UpdateWindow()) {
@@ -246,6 +259,41 @@ void TestPushdownAutomata(Window* w) {
 		}
 	}
 }
+
+//class TestPacketReceiver :public PacketReceiver {
+//public:
+//	TestPacketReceiver(std::string name) {
+//		this->name = name;
+//	}
+//	void ReceivePacket(int type, GamePacket* payload, int source) {
+//		if (type == String_Message) {
+//			StringPacket* realPacket = (StringPacket*)payload;
+//			std::string msg = realPacket->GetStringFromData();
+//			std::cout << name << "received message:" << msg << std::endl;
+//		}
+//	}
+//protected:
+//	std::string name;
+//};
+//void TestNetworking() {
+//	NetworkBase::Initialise();
+//	TestPacketReceiver serverReceiver("Server");
+//	TestPacketReceiver clientReceiver("Client");
+//	int port = NetworkBase::GetDefaultPort();
+//	GameServer* server = new GameServer(port, 1);
+//	GameClient* client = new GameClient();
+//	server->RegisterPacketHandler(String_Message, &serverReceiver);
+//	client->RegisterPacketHandler(String_Message, &clientReceiver);
+//	bool canConnect = client->Connect(127, 0, 0, 1, port);
+//	for (int i = 0; i < 100; ++i) {
+//		server->SendGlobalPacket(StringPacket("Server says hello!" + std::to_string(i)));
+//		client->SendPacket(StringPacket("Client says hello!" + std::to_string(i)));
+//		server->UpdateServer();
+//		client->UpdateClient();
+//		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+//	}
+//	NetworkBase::Destroy();
+//}
 /*
 
 The main function should look pretty familar to you!
@@ -260,7 +308,7 @@ hide or show the
 */
 int main() {
 	Window*w = Window::CreateGameWindow("CSC8503 Game technology!", 1920, 1200,true);
-	TestPushdownAutomata(w);
+	/*TestPushdownAutomata(w);*/
 	if (!w->HasInitialised()) {
 		return -1;
 	}	
@@ -269,8 +317,9 @@ int main() {
 	w->LockMouseToWindow(true);
 
 	TutorialGame* g = new TutorialGame();
+	
 	w->GetTimer().GetTimeDeltaSeconds(); //Clear the timer so we don't get a larget first dt!
-	TestPathfinding();
+	/*TestPathfinding();*/
 	
 	while (w->UpdateWindow() && !Window::GetKeyboard()->KeyDown(KeyCodes::ESCAPE)) {
 		float dt = w->GetTimer().GetTimeDeltaSeconds();
@@ -287,9 +336,9 @@ int main() {
 			w->ShowConsole(false);
 		}
 
-		if (Window::GetKeyboard()->KeyPressed(KeyCodes::T)) {
+		/*if (Window::GetKeyboard()->KeyPressed(KeyCodes::T)) {
 			w->SetWindowPosition(0, 0);
-		}
+		}*/
 
 		w->SetTitle("Gametech frame time:" + std::to_string(1000.0f * dt));
 

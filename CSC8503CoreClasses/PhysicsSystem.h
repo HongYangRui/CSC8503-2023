@@ -50,6 +50,10 @@ namespace NCL {
 			std::vector<CollisionDetection::CollisionInfo> broadphaseCollisionsVec;
 			bool useBroadPhase		= true;
 			int numCollisionFrames	= 5;
+			int fraction = 0;
+			int destroynum = 9;
+			int TPtime1 = 40;
+			int TPtime2 = 40;
 		};
 	}
 }

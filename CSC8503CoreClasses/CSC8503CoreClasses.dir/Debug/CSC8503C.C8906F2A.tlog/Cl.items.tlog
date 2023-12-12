@@ -60,6 +60,10 @@ C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\PhysicsObject.cpp;C:\Users\c20
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\PhysicsObject.h;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\PhysicsObject.h.obj
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\PhysicsSystem.cpp;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\PhysicsSystem.cpp.obj
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\PhysicsSystem.h;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\PhysicsSystem.h.obj
+C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HingeConstraint.h;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\HingeConstraint.h.obj
+C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HingeConstraint.cpp;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\HingeConstraint.cpp.obj
+C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HeightConstraint.h;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\HeightConstraint.h.obj
+C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\HeightConstraint.cpp;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\HeightConstraint.cpp.obj
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\enet\callbacks.c;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\callbacks.obj
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\enet\list.h;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\enet\list.h.obj
 C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\enet\list.c;C:\Users\c2013448\CSC8503 2023\CSC8503CoreClasses\CSC8503CoreClasses.dir\Debug\enet\list.c.obj

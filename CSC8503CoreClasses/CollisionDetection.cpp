@@ -134,7 +134,30 @@ bool CollisionDetection::RaySphereIntersection(const Ray&r, const Transform& wor
 }
 
 bool CollisionDetection::RayCapsuleIntersection(const Ray& r, const Transform& worldTransform, const CapsuleVolume& volume, RayCollision& collision) {
-	return false;
+	Vector3 capsulePos = worldTransform.GetPosition();
+	float capsuleRadius = volume.GetRadius();
+	Vector3 objectDir = worldTransform.GetOrientation() * Vector3(0, 1, 0);
+	Vector3 vectorToEnd = objectDir * (volume.GetHalfHeight() - volume.GetRadius());
+	Vector3 bottomPoint = capsulePos - vectorToEnd;
+	Vector3 topPoint = capsulePos + vectorToEnd;
+	Vector3 capsuleVector = topPoint - bottomPoint;
+
+
+	Vector3 dir = (capsulePos - r.GetPosition());
+	Vector3 planePoint = capsulePos + Vector3::Cross(capsuleVector, dir).Normalised();
+	Plane p = Plane::PlaneFromTri(topPoint + (dir.Normalised() * capsuleRadius), bottomPoint + (dir.Normalised() * capsuleRadius), planePoint);
+
+	if (!RayPlaneIntersection(r, p, collision)) {
+		return false;
+	}
+
+	Vector3 AB = bottomPoint - topPoint;
+	float t = Vector3::Dot(collision.collidedAt - topPoint, AB) / Vector3::Dot(AB, AB);
+	t = (t < 0.0f) ? 0.0f : (t > 1.0f) ? 1.0f : t;
+	Vector3 clampedPos = topPoint + AB * t;
+	Transform sphereTransform = worldTransform;
+	sphereTransform.SetPosition(clampedPos);
+	return RaySphereIntersection(r, sphereTransform, SphereVolume(volume.GetRadius()), collision);
 }
 
 bool CollisionDetection::ObjectIntersection(GameObject* a, GameObject* b, CollisionInfo& collisionInfo) {
@@ -307,20 +330,65 @@ bool CollisionDetection::AABBSphereIntersection(const AABBVolume& volumeA, const
 
 bool  CollisionDetection::OBBSphereIntersection(const OBBVolume& volumeA, const Transform& worldTransformA,
 	const SphereVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo) {
-	return false;
+	Quaternion orientation = worldTransformA.GetOrientation();
+	Vector3 position = worldTransformA.GetPosition();
+	Matrix3 transform = Matrix3(orientation);
+	Matrix3 invTransform = Matrix3(orientation.Conjugate());
+	Vector3 localSpherePos = worldTransformB.GetPosition() - position;
+	Transform one = worldTransformA;
+	one.SetPosition(Vector3());
+	Transform two = worldTransformB;
+	two.SetPosition(invTransform * localSpherePos);
+	bool collided = AABBSphereIntersection(AABBVolume(volumeA.GetHalfDimensions()), one, volumeB, two, collisionInfo);
+	if (collided) {
+		collisionInfo.point.localA = transform * collisionInfo.point.localA;
+		collisionInfo.point.localB = transform * collisionInfo.point.localB;
+		collisionInfo.point.normal = transform * collisionInfo.point.normal;
+	}
+	return collided;
 }
 
 bool CollisionDetection::AABBCapsuleIntersection(
 	const CapsuleVolume& volumeA, const Transform& worldTransformA,
 	const AABBVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo) {
-	return false;
+	Vector3 capsulePos = worldTransformA.GetPosition();
+	Vector3 objectDir = worldTransformA.GetOrientation() * Vector3(0, 1, 0);
+	Vector3 vectorToEnd = objectDir * (volumeA.GetHalfHeight() - volumeA.GetRadius());
+	Vector3 bottomPoint = capsulePos - vectorToEnd;
+	Vector3 topPoint = capsulePos + vectorToEnd;
+
+	Vector3 AB = bottomPoint - topPoint;
+	float t = Vector3::Dot(worldTransformB.GetPosition() - topPoint, AB) / Vector3::Dot(AB, AB);
+	t = (t < 0.0f) ? 0.0f : (t > 1.0f) ? 1.0f : t;
+	Vector3 clampedPos = topPoint + AB * t;
+
+	Transform sphereTransform = worldTransformA;
+	sphereTransform.SetPosition(clampedPos);
+	bool collision = AABBSphereIntersection(volumeB, worldTransformB, SphereVolume(volumeA.GetRadius()), sphereTransform, collisionInfo);
+	collisionInfo.point.normal = -collisionInfo.point.normal;
+	return collision;
 }
 
 bool CollisionDetection::SphereCapsuleIntersection(
 	const CapsuleVolume& volumeA, const Transform& worldTransformA,
 	const SphereVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo) {
-	return false;
+
+	Vector3 capsulePos = worldTransformA.GetPosition();
+	Vector3 objectDir = worldTransformA.GetOrientation() * Vector3(0, 1, 0);
+	Vector3 vectorToEnd = objectDir * (volumeA.GetHalfHeight() - volumeA.GetRadius());
+	Vector3 bottomPoint = capsulePos - vectorToEnd;
+	Vector3 topPoint = capsulePos + vectorToEnd;
+	Vector3 AB = bottomPoint - topPoint;
+
+	float t = Vector3::Dot(worldTransformB.GetPosition() - topPoint, AB) / Vector3::Dot(AB, AB);
+	float clampedT = (t < 0.0f) ? 0.0f : (t > 1.0f) ? 1.0f : t;
+	Vector3 clampedPos = topPoint + AB * clampedT;
+
+	Transform sphereTransform = worldTransformA;
+	sphereTransform.SetPosition(clampedPos);
+	return SphereIntersection(SphereVolume(volumeA.GetRadius()), sphereTransform, volumeB, worldTransformB, collisionInfo);
 }
+
 
 bool CollisionDetection::OBBIntersection(const OBBVolume& volumeA, const Transform& worldTransformA,
 	const OBBVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo) {

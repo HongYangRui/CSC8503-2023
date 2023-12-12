@@ -73,7 +73,6 @@ source_group("Networking" FILES ${Networking})
 
 set(Physics
     "constraint.h"  
-     "constraint.h"  
     "PositionConstraint.cpp"
     "PositionConstraint.h"
     "OrientationConstraint.cpp"
@@ -82,6 +81,10 @@ set(Physics
     "PhysicsObject.h"
     "PhysicsSystem.cpp"
     "PhysicsSystem.h"
+    "HingeConstraint.h"
+    "HingeConstraint.cpp"
+    "HeightConstraint.h"
+    "HeightConstraint.cpp"
 )
 source_group("Physics" FILES ${Physics})
 

@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.6.3+07e294721 for .NET Framework
-      Build started 27/11/2023 14:17:50.
+      Build started 11/12/2023 19:10:28.
       
       Project "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\3.28.0-rc5\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
@@ -51,7 +51,7 @@ events:
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.70
+      Time Elapsed 00:00:00.83
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -70,8 +70,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-759169"
-      binary: "C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-759169"
+      source: "C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-nm07gg"
+      binary: "C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-nm07gg"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -80,38 +80,38 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-759169'
+        Change Dir: 'C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-nm07gg'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_67c0d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_e6e35.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Build started 27/11/2023 14:17:51.
+        Build started 11/12/2023 19:10:29.
         
-        Project "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-759169\\cmTC_67c0d.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-nm07gg\\cmTC_e6e35.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_67c0d.dir\\Debug\\".
-          Creating directory "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-759169\\Debug\\".
-          Creating directory "cmTC_67c0d.dir\\Debug\\cmTC_67c0d.tlog\\".
+          Creating directory "cmTC_e6e35.dir\\Debug\\".
+          Creating directory "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-nm07gg\\Debug\\".
+          Creating directory "cmTC_e6e35.dir\\Debug\\cmTC_e6e35.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_67c0d.dir\\Debug\\cmTC_67c0d.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Creating "cmTC_e6e35.dir\\Debug\\cmTC_e6e35.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_67c0d.dir\\Debug\\\\" /Fd"cmTC_67c0d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\c2013448\\cmake-3.28.0-rc5-windows-x86_64\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e6e35.dir\\Debug\\\\" /Fd"cmTC_e6e35.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\c2013448\\cmake-3.28.0-rc5-windows-x86_64\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.36.32534 for x64
           CMakeCXXCompilerABI.cpp
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_67c0d.dir\\Debug\\\\" /Fd"cmTC_67c0d.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\c2013448\\cmake-3.28.0-rc5-windows-x86_64\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_e6e35.dir\\Debug\\\\" /Fd"cmTC_e6e35.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\c2013448\\cmake-3.28.0-rc5-windows-x86_64\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-759169\\Debug\\cmTC_67c0d.exe" /INCREMENTAL /ILK:"cmTC_67c0d.dir\\Debug\\cmTC_67c0d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-759169/Debug/cmTC_67c0d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-759169/Debug/cmTC_67c0d.lib" /MACHINE:X64  /machine:x64 cmTC_67c0d.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_67c0d.vcxproj -> C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-759169\\Debug\\cmTC_67c0d.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-nm07gg\\Debug\\cmTC_e6e35.exe" /INCREMENTAL /ILK:"cmTC_e6e35.dir\\Debug\\cmTC_e6e35.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-nm07gg/Debug/cmTC_e6e35.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/c2013448/CSC8503 2023/CMakeFiles/CMakeScratch/TryCompile-nm07gg/Debug/cmTC_e6e35.lib" /MACHINE:X64  /machine:x64 cmTC_e6e35.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_e6e35.vcxproj -> C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-nm07gg\\Debug\\cmTC_e6e35.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_67c0d.dir\\Debug\\cmTC_67c0d.tlog\\unsuccessfulbuild".
-          Touching "cmTC_67c0d.dir\\Debug\\cmTC_67c0d.tlog\\cmTC_67c0d.lastbuildstate".
-        Done Building Project "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-759169\\cmTC_67c0d.vcxproj" (default targets).
+          Deleting file "cmTC_e6e35.dir\\Debug\\cmTC_e6e35.tlog\\unsuccessfulbuild".
+          Touching "cmTC_e6e35.dir\\Debug\\cmTC_e6e35.tlog\\cmTC_e6e35.lastbuildstate".
+        Done Building Project "C:\\Users\\c2013448\\CSC8503 2023\\CMakeFiles\\CMakeScratch\\TryCompile-nm07gg\\cmTC_e6e35.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.54
+        Time Elapsed 00:00:00.53
         
       exitCode: 0
 ...

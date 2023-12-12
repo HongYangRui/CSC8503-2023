@@ -1,15 +1,39 @@
-﻿  Camera.cpp
+﻿  cmake_pch.cxx
+  Assets.cpp
+  Camera.cpp
+  Controller.cpp
   Frustum.cpp
+  GameTimer.cpp
+  Keyboard.cpp
+  KeyboardMouseController.cpp
   Maths.cpp
+  Matrix2.cpp
   Matrix3.cpp
   Matrix4.cpp
   Mesh.cpp
+  MeshAnimation.cpp
+  MeshMaterial.cpp
+  Mouse.cpp
   MshLoader.cpp
   Plane.cpp
   Quaternion.cpp
+  RendererBase.cpp
+  Shader.cpp
+  Generating Code...
+  Compiling...
   SimpleFont.cpp
+  Texture.cpp
+  TextureLoader.cpp
+  TextureWriter.cpp
   Vector2.cpp
+  Vector2i.cpp
   Vector3.cpp
+  Vector3I.cpp
   Vector4.cpp
+  Vector4I.cpp
+  Win32Keyboard.cpp
+  Win32Mouse.cpp
+  Win32Window.cpp
+  Window.cpp
   Generating Code...
   NCLCoreClasses.vcxproj -> C:\Users\c2013448\CSC8503 2023\NCLCoreClasses\Debug\NCLCoreClasses.lib

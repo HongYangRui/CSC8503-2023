@@ -9,15 +9,16 @@
 #include "Debug.h"
 #include "Window.h"
 #include <functional>
+#include <PositionConstraint.h>
 using namespace NCL;
 using namespace CSC8503;
 
 PhysicsSystem::PhysicsSystem(GameWorld& g) : gameWorld(g)	{
 	applyGravity	= false;
-	useBroadPhase	= false;	
+	useBroadPhase	= true;	
 	dTOffset		= 0.0f;
 	globalDamping	= 0.995f;
-	SetGravity(Vector3(0.0f, -9.8f, 0.0f));
+	SetGravity(Vector3(0.0f, -19.8f, 0.0f));
 }
 
 PhysicsSystem::~PhysicsSystem()	{
@@ -96,6 +97,8 @@ void PhysicsSystem::Update(float dt) {
 		if (useBroadPhase) {
 			BroadPhase();
 			NarrowPhase();
+			if (TPtime1 < 0)TPtime1 = 40;
+			if (TPtime2 < 0)TPtime2 = 40;
 		}
 		else {
 			BasicCollisionDetection();
@@ -216,7 +219,7 @@ void PhysicsSystem::BasicCollisionDetection() {
 			}
 			CollisionDetection::CollisionInfo info;
 			if (CollisionDetection::ObjectIntersection(*i, *j, info)) {
-				std::cout << "Collision between " << (*i)->GetName() << " and " << (*j)->GetName() << std::endl;
+				/*std::cout << "Collision between " << (*i)->GetName() << " and " << (*j)->GetName() << std::endl;*/
 				ImpulseResolveCollision(*info.a, *info.b, info.point);
 				info.framesLeft = numCollisionFrames;
 				allCollisions.insert(info);
@@ -327,10 +330,71 @@ void PhysicsSystem::NarrowPhase() {
 	for (std::set<CollisionDetection::CollisionInfo>::iterator i = broadphaseCollisions.begin(); i != broadphaseCollisions.end(); ++i) {
 		CollisionDetection::CollisionInfo info = *i;
 		if (CollisionDetection::ObjectIntersection(info.a, info.b, info)) {
-			info.framesLeft = numCollisionFrames;
-			ImpulseResolveCollision(*info.a, *info.b, info.point);
-			allCollisions.insert(info);//insert into our main set
+			bool isCoinA = info.a->IsCoin();
+			bool isCoinB = info.b->IsCoin();
+			bool isPlayerA = info.a->IsPlayer();
+			bool isPlayerB = info.b->IsPlayer();
+			bool isStartAreaA = info.a->IsStartArea();
+			bool isStartAreaB = info.b->IsStartArea();
+			bool isTargetA = info.a->IsTarget();
+			bool isTargetB = info.b->IsTarget();
+			bool isPortal1A = info.a->IsPortal1();
+			bool isPortal1B= info.b->IsPortal1();
+			bool isPortal2A = info.a->IsPortal2();
+			bool isPortal2B = info.b->IsPortal2();
+			
+			if ((isPortal1A && isPlayerB) || (isPortal1B && isPlayerA)) {
+				Debug::Print("you will tp to portal2 when number till 0,number=" + std::to_string(TPtime1), Vector2(0, 50), Debug::RED);
+				TPtime1 = TPtime1-1;
+				if (isPlayerB && TPtime1 == 0) {
+					info.b->GetTransform().SetPosition(Vector3(-80, 0, -80));
+				}
+					
+				if (isPlayerA && TPtime1 == 0) {
+					info.a->GetTransform().SetPosition(Vector3(-80, 0, -80));
+				}
+				
+			}
+
+			if ((isPortal2A && isPlayerB) || (isPortal2B && isPlayerA)) {
+				Debug::Print("you will tp to portal1 when number till 0,number=" + std::to_string(TPtime2), Vector2(0,50), Debug::RED);
+				TPtime2 = TPtime2-1;
+				if (isPlayerB && TPtime2 == 0) {
+					info.b->GetTransform().SetPosition(Vector3(-40, 0, 60));
+				}
+				if (isPlayerA && TPtime2 == 0) {
+					info.a->GetTransform().SetPosition(Vector3(-40, 0, 60));
+				}
+			}
+			if ((isStartAreaA && isTargetB) || (isStartAreaB && isTargetA)) {
+				Debug::Print("Your Win!" , Vector2(40, 50), Debug::RED);
+			}
+			
+			if ((isCoinA && isPlayerB) || (isPlayerA && isCoinB)) {
+				//info.framesLeft = numCollisionFrames;
+				//ImpulseResolveCollision(*info.a, *info.b, info.point);
+				//allCollisions.insert(info);//insert into our main set
+				if (info.a->IsActive() && isCoinA) {
+					info.a->SetIsActive(false);
+					/*gameWorld.RemoveGameObject(info.a);*/
+					fraction++;
+					destroynum--;
+				}
+				if (info.b->IsActive()&&isCoinB) {
+					info.b->SetIsActive(false);
+					/*gameWorld.RemoveGameObject(info.b);*/
+					fraction++;
+					destroynum--;
+				}
+			}
+			
+				info.framesLeft = numCollisionFrames;
+				ImpulseResolveCollision(*info.a, *info.b, info.point);
+				allCollisions.insert(info);//insert into our main set}
+			
 		}
+		Debug::Print("Your fraction is :" + std::to_string(fraction), Vector2(0, 10), Debug::RED);
+		Debug::Print("left destroyable items :" + std::to_string(destroynum), Vector2(50, 10), Debug::RED);
 	}
 }
 

@@ -25,6 +25,54 @@ namespace NCL::CSC8503 {
 		bool IsActive() const {
 			return isActive;
 		}
+		bool IsCoin() const {
+			return isCoin;
+		}
+		void SetIsCoin(bool value){
+			isCoin = value;
+		}
+		bool IsPlayer() const {
+			return isPlayer;
+		}
+		void SetIsPlayer(bool value) {
+			isPlayer = value;
+		}
+
+		void SetIsActive(bool value) {
+			isActive = value;
+		}
+
+		bool IsTarget()const {
+			return isTarget;
+		}
+		void SetIsTarget(bool value) {
+			isTarget = value;
+		}
+		bool IsStartArea()const {
+			return isStartArea;
+		}
+		void SetIsStartArea(bool value) {
+			isStartArea = value;
+		}
+		bool IsPortal1()const {
+			return isPortal1;
+		}
+		void SetIsPortal1(bool value) {
+			isPortal1 = value;
+		}
+
+		bool IsPortal2()const {
+			return isPortal2;
+		}
+		void SetIsPortal2(bool value) {
+			isPortal2 = value;
+		}
+		bool IsObstacle()const {
+			return isObstacle;
+		}
+		void SetIsObstacle(bool value) {
+			isObstacle = value;
+		}
 
 		Transform& GetTransform() {
 			return transform;
@@ -82,7 +130,16 @@ namespace NCL::CSC8503 {
 		RenderObject*		renderObject;
 		NetworkObject*		networkObject;
 
+		bool		isCoin;
+		bool		isPlayer;
 		bool		isActive;
+		bool        isTarget;
+		bool        isStartArea;
+		bool isDoor1a;
+		bool isDoor1b;
+		bool isPortal1;
+		bool isPortal2;
+		bool isObstacle;
 		int			worldID;
 		std::string	name;
 
