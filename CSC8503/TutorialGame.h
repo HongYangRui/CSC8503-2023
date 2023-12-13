@@ -8,6 +8,10 @@
 #include "PhysicsSystem.h"
 
 #include "StateGameObject.h"
+#include "BehaviourNode.h"
+#include "BehaviourSelector.h"
+#include "BehaviourSequence.h"
+#include "BehaviourAction.h"
 
 namespace NCL {
 	namespace CSC8503 {
@@ -22,11 +26,11 @@ namespace NCL {
 
 			/*void SetEndGame(bool s) { gameEnded = s; }
 			bool GetEndGame() { return gameEnded; }*/
-
+			BehaviourSequence* rootSequence; 
 		protected:
 			//statemachine
 			StateGameObject* AddStateObjectToWorld(const Vector3& position);
-			StateGameObject* testStateObject;
+			StateGameObject* Enemy1;
 
 			void InitialiseAssets();
 
@@ -52,13 +56,19 @@ namespace NCL {
 			void InitGameWorld();
 			void GenerateMazeBuilding();
 
+			void GoosePathfinding();
+
+			void GoosePathfindingDoor();
+
 			void InitDefaultFloor();
+
 
 			bool SelectObject();
 			void MoveSelectedObject();
 			void DebugObjectMovement();
 			void LockedObjectMovement();
 			void BridgeConstraintTest();
+			void GooseBehaviourTree();
 			void UpdateObjectRotation(GameObject* obj);
 			GameObject* AddFloorToWorld(const Vector3& position);
 			GameObject* SetStartArea();
@@ -67,8 +77,10 @@ namespace NCL {
 			GameObject* AddCapsuleToWorld(const Vector3& position, float halfHeight, float radius, float inverseMass);
 			GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
 			GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass = 10.0f);
+			GameObject* AddOBBCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass = 10.0f);
 
 			GameObject* AddPlayerToWorld(const Vector3& position);
+			GameObject* AddGooseToWorld(const Vector3& position);
 			GameObject* AddEnemyToWorld(const Vector3& position);
 			GameObject* AddBonusToWorld(const Vector3& position);
 
@@ -94,6 +106,8 @@ namespace NCL {
 			Mesh*	capsuleMesh = nullptr;
 			Mesh*	cubeMesh	= nullptr;
 			Mesh*	sphereMesh	= nullptr;
+			Mesh* GooseMesh = nullptr;
+
 
 			Texture*	basicTex	= nullptr;
 			Shader*		basicShader = nullptr;
@@ -111,7 +125,7 @@ namespace NCL {
 			}
 
 			GameObject* objClosest = nullptr;
-			
+			GameObject* obbdoor;
 			GameObject* player;
 			GameObject* target;
 			GameObject* startArea;
@@ -120,7 +134,11 @@ namespace NCL {
 			GameObject* Key;
 			GameObject* portal1;
 			GameObject* portal2;
+			GameObject* Goose;
 			/*bool gameEnded = false;*/
+			float totaltime = 0.0f;
+			BehaviourState state;
+			
 		};
 	}
 }

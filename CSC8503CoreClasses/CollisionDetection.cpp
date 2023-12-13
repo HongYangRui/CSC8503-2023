@@ -160,6 +160,8 @@ bool CollisionDetection::RayCapsuleIntersection(const Ray& r, const Transform& w
 	return RaySphereIntersection(r, sphereTransform, SphereVolume(volume.GetRadius()), collision);
 }
 
+
+
 bool CollisionDetection::ObjectIntersection(GameObject* a, GameObject* b, CollisionInfo& collisionInfo) {
 	const CollisionVolume* volA = a->GetBoundingVolume();
 	const CollisionVolume* volB = b->GetBoundingVolume();
@@ -399,7 +401,6 @@ Matrix4 GenerateInverseView(const Camera &c) {
 	float pitch = c.GetPitch();
 	float yaw	= c.GetYaw();
 	Vector3 position = c.GetPosition();
-
 	Matrix4 iview =
 		Matrix4::Translation(position) *
 		Matrix4::Rotation(-yaw, Vector3(0, -1, 0)) *

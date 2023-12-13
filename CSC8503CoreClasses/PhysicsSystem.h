@@ -5,6 +5,18 @@ namespace NCL {
 	namespace CSC8503 {
 		class PhysicsSystem	{
 		public:
+			void SetGooseDoor(bool value) {
+				GooseDoor = value;
+			}
+			bool IsGooseDoor()const {
+				return GooseDoor;
+			}
+			void SetGoosePlayer(bool value) {
+				GooseDoor = value;
+			}
+			bool IsGoosePlayer()const {
+				return GoosePlayer;
+			}
 			PhysicsSystem(GameWorld& g);
 			~PhysicsSystem();
 
@@ -51,9 +63,15 @@ namespace NCL {
 			bool useBroadPhase		= true;
 			int numCollisionFrames	= 5;
 			int fraction = 0;
+			int GooseScore = 0;
 			int destroynum = 9;
 			int TPtime1 = 40;
 			int TPtime2 = 40;
+			int Key = 0;
+			int winorlose = 0;
+			bool GooseDoor = false;
+			bool GoosePlayer = false;
+			
 		};
 	}
 }

@@ -15,6 +15,10 @@ namespace NCL {
             void MoveLeft(float dt);
             void MoveRight(float dt);
 
+            void MoveForward(float dt);
+
+            void MoveBackward(float dt);
+
             StateMachine* stateMachine;
             float counter;
         };

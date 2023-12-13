@@ -9,10 +9,13 @@
 #include "StateGameObject.h"
 #include"HingeConstraint.h"
 #include"HeightConstraint.h"
+#include <NavigationGrid.h>
+
+
 
 using namespace NCL;
 using namespace CSC8503;
-
+vector<Vector3> testNodes;
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
 	world		= new GameWorld();
 #ifdef USEVULKAN
@@ -58,7 +61,7 @@ void TutorialGame::InitialiseAssets() {
 	enemyMesh	= renderer->LoadMesh("Keeper.msh");
 	bonusMesh	= renderer->LoadMesh("coin.msh");
 	capsuleMesh = renderer->LoadMesh("capsule.msh");
-
+	GooseMesh = renderer->LoadMesh("goose.msh");
 	basicTex	= renderer->LoadTexture("checkerboard.png");
 	basicShader = renderer->LoadShader("scene.vert", "scene.frag");
 
@@ -80,23 +83,31 @@ TutorialGame::~TutorialGame()	{
 	delete renderer;
 	delete world;
 }
-//void TutorialGame::UPdateConstarin() {
-//	Vector3 position1 = player->GetTransform().GetPosition();
-//	Vector3 position2 = target->GetTransform().GetPosition();
-//	Vector3 diff = position1 - position2;
-//	float distance = diff.Length();
-//	if (distance < 4.0f) {
-//		PositionConstraint* constraint = new PositionConstraint(player, target, 4);
-//		world->AddConstraint(constraint);
-//		target->GetRenderObject()->SetColour(Debug::GREEN);
-//	}
-//}
+void TutorialGame::UPdateConstarin() {
+	Vector3 position1 = player->GetTransform().GetPosition();
+	Vector3 position2 = target->GetTransform().GetPosition();
+	Vector3 diff = position1 - position2;
+	float distance = diff.Length();
+	if (distance < 4.0f) {
+		PositionConstraint* constraint = new PositionConstraint(player, target, 4);
+		world->AddConstraint(constraint);
+		target->GetRenderObject()->SetColour(Debug::GREEN);
+	}
+}
 
 void TutorialGame::UpdateGame(float dt) {
-	/*UPdateConstarin();*/
+	UPdateConstarin();
+	totaltime += dt;
+	Debug::Print("Spent time:" + std::to_string(totaltime), Vector2(60, 20), Debug::RED);
 	//statemachine
-	if (testStateObject) {
-		testStateObject->Update(dt);
+	/*GoosePathfinding();*/
+
+	if (state == Ongoing) {
+		state = rootSequence->Execute(1.0f);//fake dt
+	}
+
+	if (Enemy1) {
+		Enemy1->Update(dt);
 	}
 
 	if (!inSelectionMode) {
@@ -147,9 +158,23 @@ void TutorialGame::UpdateGame(float dt) {
 			objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
 		}
 	}
+	    Vector3 AiPos;
+		Vector3 AiDir;
+		AiDir = Goose->GetTransform().GetOrientation()*Vector3(1,1,1);
+		AiPos=Goose-> GetTransform().GetPosition();
+		Ray ai = Ray(AiPos,AiDir);
+		if(world->Raycast(ai,closestCollision,true, target)) {
+			if (objClosest) {
+				objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
+			}
+			objClosest = (GameObject*)closestCollision.node;
+			objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
+		}
+		Debug::DrawLine(AiPos, player->GetTransform().GetPosition(), Vector4(1,0,1,1));
 
 	Debug::DrawLine(Vector3(), Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
-
+	//Debug::DrawLine(Vector3(), Vector3(100, 0, 0), Vector4(0, 1, 0, 1));
+	//Debug::DrawLine(Vector3(), Vector3(0, 0, 100), Vector4(0, 0, 1, 1));
 	SelectObject();
 	MoveSelectedObject();
 
@@ -319,8 +344,7 @@ void TutorialGame::InitWorld() {
 	SetPortal1();
 	SetPortal2();
 	/*BridgeConstraintTest();*/
-	//statemachine
-	/*testStateObject = AddStateObjectToWorld(Vector3(0, 50, 0));*/
+	GooseBehaviourTree();
 }
 
 /*
@@ -352,7 +376,7 @@ GameObject* TutorialGame::SetStartArea() {
 	startArea = new GameObject();
 
 	Vector3 floorSize = Vector3(20, 1, 20);
-	AABBVolume* volume = new AABBVolume(floorSize);
+	AABBVolume* volume = new AABBVolume(floorSize/2);
 	startArea->SetBoundingVolume((CollisionVolume*)volume);
 	startArea->GetTransform()
 		.SetScale(floorSize)
@@ -374,7 +398,7 @@ GameObject* TutorialGame::SetStartArea() {
 GameObject* TutorialGame::SetPortal1() {
 	portal1 = new GameObject();
 	Vector3 floorSize = Vector3(10, 1, 10);
-	AABBVolume* volume = new AABBVolume(floorSize);
+	AABBVolume* volume = new AABBVolume(floorSize/2);
 	portal1->SetBoundingVolume((CollisionVolume*)volume);
 	portal1->GetTransform()
 		.SetScale(floorSize)
@@ -395,7 +419,7 @@ GameObject* TutorialGame::SetPortal1() {
 GameObject* TutorialGame::SetPortal2() {
 	portal2 = new GameObject();
 	Vector3 floorSize = Vector3(10, 1, 10);
-	AABBVolume* volume = new AABBVolume(floorSize);
+	AABBVolume* volume = new AABBVolume(floorSize/2);
 	portal2->SetBoundingVolume((CollisionVolume*)volume);
 	portal2->GetTransform()
 		.SetScale(floorSize)
@@ -486,6 +510,27 @@ GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimens
 	return cube;
 }
 
+GameObject* TutorialGame::AddOBBCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass) {
+	GameObject* cube = new GameObject();
+
+	OBBVolume* volume = new OBBVolume(dimensions);
+	cube->SetBoundingVolume((CollisionVolume*)volume);
+
+	cube->GetTransform()
+		.SetPosition(position)
+		.SetScale(dimensions * 2);
+
+	cube->SetRenderObject(new RenderObject(&cube->GetTransform(), cubeMesh, basicTex, basicShader));
+	cube->SetPhysicsObject(new PhysicsObject(&cube->GetTransform(), cube->GetBoundingVolume()));
+
+	cube->GetPhysicsObject()->SetInverseMass(inverseMass);
+	cube->GetPhysicsObject()->InitCubeInertia();
+
+	world->AddGameObject(cube);
+
+	return cube;
+}
+
 GameObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
 	float meshSize		= 2.0f;
 	float inverseMass	= 0.5f;
@@ -508,6 +553,30 @@ GameObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
 	world->AddGameObject(character);
 
 	return character;
+}
+
+GameObject* TutorialGame::AddGooseToWorld(const Vector3& position) {
+	float meshSize = 2.0f;
+	float inverseMass = 0.5f;
+
+	GameObject* Goose = new GameObject();
+	SphereVolume* volume = new SphereVolume(1.0f);
+
+	Goose->SetBoundingVolume((CollisionVolume*)volume);
+
+	Goose->GetTransform()
+		.SetScale(Vector3(meshSize, meshSize, meshSize))
+		.SetPosition(position);
+
+	Goose->SetRenderObject(new RenderObject(&Goose->GetTransform(), GooseMesh, nullptr, basicShader));
+	Goose->SetPhysicsObject(new PhysicsObject(&Goose->GetTransform(), Goose->GetBoundingVolume()));
+
+	Goose->GetPhysicsObject()->SetInverseMass(inverseMass);
+	Goose->GetPhysicsObject()->InitSphereInertia();
+	Goose->GetRenderObject()->SetColour(Debug::RED);
+	world->AddGameObject(Goose);
+
+	return Goose;
 }
 
 GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
@@ -546,7 +615,7 @@ GameObject* TutorialGame::AddBonusToWorld(const Vector3& position) {
 	coin->SetRenderObject(new RenderObject(&coin->GetTransform(), bonusMesh, nullptr, basicShader));
 	coin->SetPhysicsObject(new PhysicsObject(&coin->GetTransform(), coin->GetBoundingVolume()));
 
-	coin->GetPhysicsObject()->SetInverseMass(1.0f);
+	coin->GetPhysicsObject()->SetInverseMass(0.5f);
 	coin->GetPhysicsObject()->InitSphereInertia();
 	coin->GetRenderObject()->SetColour(Debug::YELLOW);
 	coin->SetIsCoin(true);
@@ -561,23 +630,25 @@ void TutorialGame::UpdateColor(GameObject* object, const Vector4& colour) {
 
 StateGameObject* TutorialGame::AddStateObjectToWorld(const Vector3& position)
 {
-	StateGameObject* banana = new StateGameObject();
-
-	SphereVolume* volume = new SphereVolume(0.5f);
-	banana->SetBoundingVolume((CollisionVolume*)volume);
-	banana->GetTransform()
-		.SetScale(Vector3(4, 4, 4))
+	float meshSize = 3.0f;
+	float inverseMass = 0.5f;
+	StateGameObject* robot = new StateGameObject();
+	AABBVolume* volume = new AABBVolume(Vector3(0.3f, 0.9f, 0.3f) * meshSize);
+	robot->SetBoundingVolume((CollisionVolume*)volume);
+	robot->GetTransform()
+		.SetScale(Vector3(meshSize, meshSize, meshSize))
 		.SetPosition(position);
 
-	banana->SetRenderObject(new RenderObject(&banana->GetTransform(), sphereMesh, nullptr, basicShader));
-	banana->SetPhysicsObject(new PhysicsObject(&banana->GetTransform(), banana->GetBoundingVolume()));
+	robot->SetRenderObject(new RenderObject(&robot->GetTransform(), enemyMesh, nullptr, basicShader));
+	robot->SetPhysicsObject(new PhysicsObject(&robot->GetTransform(), robot->GetBoundingVolume()));
 
-	banana->GetPhysicsObject()->SetInverseMass(1.0f);
-	banana->GetPhysicsObject()->InitSphereInertia();
+	robot->GetPhysicsObject()->SetInverseMass(inverseMass);
+	robot->GetPhysicsObject()->InitSphereInertia();
+	robot->GetRenderObject()->SetColour(Debug::RED);
 
-	world->AddGameObject(banana);
+	world->AddGameObject(robot);
 
-	return banana;
+	return robot;
 }
 
 
@@ -593,23 +664,40 @@ void TutorialGame::InitGameExamples() {
 	target = AddPlayerToWorld(Vector3(-40, -17, 20));
 	target->SetIsTarget(true);
 	/*AddPlayerToWorld(Vector3(0, -17, 80));*/
-	AddEnemyToWorld(Vector3(5, 5, 0));
-	AddCubeToWorld(Vector3(10, -10, 20), Vector3(1, 10, 10), 1.0f);
+	/*AddEnemyToWorld(Vector3(5, 5, 0));*/
+	obbdoor=AddOBBCubeToWorld(Vector3(10, -10, 20), Vector3(1, 10, 10), 0.0f);
+	obbdoor->SetIsobbDoor(true);
 	door1a=AddCubeToWorld(Vector3(32, -8, 0), Vector3(1, 10, 1), 0.0f);
 	door1b=AddCubeToWorld(Vector3(41, -8, 0), Vector3(8, 10, 1), 1.0f);
+	door1b->SetIsDoor1(true);
 	PositionConstraint* DoorConstraint = new PositionConstraint(door1a, door1b, 9);
 	HingeConstraint* doorConstraint = new HingeConstraint(door1a,door1b);
 	HeightConstraint* heightConstraint = new HeightConstraint(door1b,-8.0f);
 	world->AddConstraint(heightConstraint);
 	world->AddConstraint(DoorConstraint);
 	world->AddConstraint(doorConstraint);
-	Obstacle = AddSphereToWorld(Vector3(40, -10, -40), 10.0f, 0.0f);
+	Obstacle = AddSphereToWorld(Vector3(0, -10, 40), 10.0f, 0.0f);
 	Obstacle->GetRenderObject()->SetColour(Debug::MAGENTA);
 	Obstacle->SetIsObstacle(true);
-	Key = AddCapsuleToWorld(Vector3(-80, -15, 0), 4.0f, 1.0f, 1.0f);
+	Key = AddCapsuleToWorld(Vector3(-80, -14, 0), 3.0f, 1.0f, 1.0f);
 	Key->GetRenderObject()->SetColour(Debug::MAGENTA);
+	Key->SetIsKey(true);
+	Goose = AddGooseToWorld(Vector3(80,-17,20));
+	Goose->SetIsGoose(true);
+	OrientationConstraint* gtConstraint = new OrientationConstraint(Goose, player);
+	world->AddConstraint(gtConstraint);
+	Enemy1 = AddStateObjectToWorld(Vector3(-82, -14,0));
+	Enemy1->SetIsEnemy1(true);
+	/*OrientationConstraint* guradConstaint = new OrientationConstraint(Enemy1,Key);
+	world->AddConstraint(guradConstaint);*/
 
-	
+
+	AddCubeToWorld(Vector3(60, -15, 60), Vector3(1, 1, 1), 1.0f);
+	AddCubeToWorld(Vector3(60, -15, 65), Vector3(1, 1, 1), 1.0f);
+	AddSphereToWorld(Vector3(65, -15, 60), 1.0f, 1.0f);
+	AddSphereToWorld(Vector3(65, -15, 65), 1.0f, 1.0f);
+	AddCapsuleToWorld(Vector3(70, -15,60), 2.0f, 1.0f, 1.0f);
+	AddCapsuleToWorld(Vector3(70, -15, 65), 2.0f, 1.0f, 1.0f);
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {
@@ -687,16 +775,17 @@ void TutorialGame::InitCubeGridWorld(int numRows, int numCols, float rowSpacing,
 void TutorialGame::GenerateMazeBuilding() {
 	std::vector<std::string> mazeBlueprint = { 
 		"11111111111",
-		"10102000201", 
-		"10121212121", 
-		"10102000201", 
-		"10100010101",
-		"10101110101", 
-		"10101000101", 
+		"10101222221", 
+		"10101211121", 
+		"10101200121", 
+		"10122210121",
+		"10121110121", 
+		"10101002101", 
 		"10111011111", 
-		"10100200001",
-		"10100000001",
-		"11111111111" };
+		"10120000001",
+		"10122000001",
+		"11111111111"
+	};
 	float cellSize = 10.0f; float wallThickness = 10.0f;
 	for (int i = 0; i < mazeBlueprint.size(); ++i) {
 		for (int j = 0; j < mazeBlueprint[i].size(); ++j) {
@@ -714,6 +803,62 @@ void TutorialGame::GenerateMazeBuilding() {
 	}
 }
 
+void TutorialGame::GoosePathfinding() {
+	/*NavigationGrid grid("GooseGrid1.txt");*/
+	NavigationGrid grid("GooseGrid2.txt");
+	NavigationPath outPath;
+	/*Vector3 offset = Vector3(40, 20, 80);*/
+	Vector3 offset = Vector3(100, 15,100);
+	Vector3 startPos = Goose->GetTransform().GetPosition();
+	/*Vector3 endPos = target->GetTransform().GetPosition();*/
+	Vector3 endPos = player->GetTransform().GetPosition();
+	bool found = grid.FindPath(startPos + offset, endPos + offset, outPath);
+	Vector3 pos;
+	if (found) {
+		while (outPath.PopWaypoint(pos)) {
+			testNodes.push_back(pos);
+		}
+		if (testNodes.size()>1) {
+			Goose->GetPhysicsObject()->AddForce(((testNodes[1] - offset) - startPos));
+		}
+	}
+		for (int i = 1; i < testNodes.size(); ++i) {
+			Vector3 a = testNodes[i - 1] - offset;
+			Vector3 b = testNodes[i] - offset;
+			Debug::DrawLine(a, b, Vector4(0, 1, 0, 1));
+			/*Goose->GetPhysicsObject()->AddForce((b-a));*/
+		}
+		testNodes.clear();
+}
+
+
+void TutorialGame::GoosePathfindingDoor() {
+	/*NavigationGrid grid("GooseGrid1.txt");*/
+	NavigationGrid grid("GooseGrid2.txt");
+	NavigationPath outPath;
+	/*Vector3 offset = Vector3(40, 20, 80);*/
+	Vector3 offset = Vector3(100, 15, 100);
+	Vector3 startPos = Goose->GetTransform().GetPosition();
+	/*Vector3 endPos = target->GetTransform().GetPosition();*/
+	Vector3 endPos = Vector3(41, -8, 0);
+	bool found = grid.FindPath(startPos + offset, endPos + offset, outPath);
+	Vector3 pos;
+	if (found) {
+		while (outPath.PopWaypoint(pos)) {
+			testNodes.push_back(pos);
+		}
+		if (testNodes.size() > 1) {
+			Goose->GetPhysicsObject()->AddForce(((testNodes[1] - offset) - startPos));
+		}
+	}
+	for (int i = 1; i < testNodes.size(); ++i) {
+		Vector3 a = testNodes[i - 1] - offset;
+		Vector3 b = testNodes[i] - offset;
+		Debug::DrawLine(a, b, Vector4(0, 1, 0, 1));
+		/*Goose->GetPhysicsObject()->AddForce((b-a));*/
+	}
+	testNodes.clear();
+}
 /*
 Every frame, this code will let you perform a raycast, to see if there's an object
 underneath the cursor, and if so 'select it' into a pointer, so that it can be 
@@ -824,20 +969,109 @@ void TutorialGame::BridgeConstraintTest() {
 }
 
 
-//void TutorialGame::UpdateObjectRotation(GameObject* obj) {
-//		Vector3 velocity = obj->GetPhysicsObject()->GetLinearVelocity();
-//		if (velocity.Length() > 0) {
-//			velocity.Normalise();
-//
-//			float angleInRadians = atan2(velocity.z, velocity.x);
-//			obj->GetTransform().SetOrientation(Quaternion::AxisAngleToQuaterion(Vector3(0,1,0), angleInRadians));
-//		}
-//}
-
-//void TutorialGame::SetStartingArea() {
-//	
-//}
-
-//void TutorialGame::DisplayInfo() {
-//
-//}
+void TutorialGame::GooseBehaviourTree() {
+	float behaviourTimer;
+	float distanceTotarget;
+	BehaviourAction* sleep = new BehaviourAction("Sleep", [&](float dt, BehaviourState state)->BehaviourState {
+		if (state == Initialise) {
+			behaviourTimer = 100;
+			std::cout << "sleep!\n";
+			Debug::Print("Sleep:", Goose->GetTransform().GetPosition());
+			state = Ongoing;
+		}
+		else if (state == Ongoing) {
+			behaviourTimer -= dt;
+			Debug::Print("Awake!", Goose->GetTransform().GetPosition());
+			if (behaviourTimer <= 0.0f) {
+				std::cout << "awake!\n";
+				
+				return Success;
+			}
+		}
+		return state;//will be ongoing until success
+		});
+	BehaviourAction* goToDoor = new BehaviourAction("gotodoor", [&](float dt, BehaviourState state)->BehaviourState {
+		if (state == Initialise) {
+			std::cout << "Going to the door\n";
+			Debug::Print("Going to the door", Goose->GetTransform().GetPosition());
+			state = Ongoing;
+		}
+		else if (state == Ongoing) {
+			GoosePathfindingDoor();
+			while (physics->IsGooseDoor()) {
+				std::cout << "Going to the door!\n";
+				return Success;
+			}
+		}
+		return state;//will be ongoing until success
+		});
+	BehaviourAction* bypassDoor = new BehaviourAction("Bypass Door", [&](float dt, BehaviourState state)->BehaviourState {
+		if (state == Initialise) {
+			std::cout << "Bypass Door\n";
+			Debug::Print("Bypass Door!", Goose->GetTransform().GetPosition());
+			state == Ongoing;
+		}
+		if (state == Ongoing) {
+			Goose->GetTransform().SetPosition(Vector3(0, -17, 80));
+			std::cout << "Bypass Door!\n";
+			return Success;
+		}
+		return state;
+		});
+	BehaviourAction* speak = new BehaviourAction("speak", [&](float dt, BehaviourState state)->BehaviourState {
+		if (state == Initialise) {
+			Debug::Print("I will catch you!", Goose->GetTransform().GetPosition());
+			std::cout << "I will catch you!\n";
+			return Ongoing;
+		}
+		else if (state == Ongoing) {
+			bool found = rand() % 2;
+			if (found) {
+				std::cout << "I will catch you!\n";
+				Debug::Print("I will catch you!", Goose->GetTransform().GetPosition());
+				return Failure;
+			}
+		}
+		return state;
+		});
+	BehaviourAction* chase = new BehaviourAction("chase player", [&](float dt, BehaviourState state)->BehaviourState {
+		if (state == Initialise) {
+			std::cout << "Chasing player!\n";
+			Debug::Print("Chasing player!", Goose->GetTransform().GetPosition());
+			return Ongoing;
+		}
+		else if (state == Ongoing) {
+			GoosePathfinding();
+			while (physics->IsGoosePlayer()) {
+				std::cout << "Catch you!\n";
+				return Failure;
+			}
+		}
+		return state;
+		});
+	BehaviourSequence* sequence = new BehaviourSequence("Room Sequence");
+	sequence->AddChild(sleep);
+	sequence->AddChild(goToDoor);
+	sequence->AddChild(bypassDoor);
+	BehaviourSelector* selection = new BehaviourSelector("Loot Selection");
+	selection->AddChild(speak);
+	selection->AddChild(chase);
+	rootSequence = new BehaviourSequence("Root Sequence");
+	rootSequence->AddChild(sequence);
+	rootSequence->AddChild(selection);
+	//for (int i = 0; i < 5; ++i) {
+		rootSequence->Reset();
+		state = Ongoing;
+		/*behaviourTimer = 0.0f;
+		distanceTotarget = rand() % 250;*/
+		//BehaviourState state = Ongoing;
+		//std::cout << "We are going on an adventure!\n";
+		//if (state == Ongoing) {
+		//	state = rootSequence->Execute(1.0f);//fake dt
+		//}
+	/*	if (state == Failure) {
+			std::cout << "What a waste of time!\n";
+		}*/
+//	}
+	//std::cout << "All done!\n";
+}

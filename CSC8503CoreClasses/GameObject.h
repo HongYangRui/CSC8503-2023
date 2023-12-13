@@ -40,6 +40,9 @@ namespace NCL::CSC8503 {
 
 		void SetIsActive(bool value) {
 			isActive = value;
+			if (value == false) {
+				SetBoundingVolume(NULL);
+			}
 		}
 
 		bool IsTarget()const {
@@ -73,6 +76,37 @@ namespace NCL::CSC8503 {
 		void SetIsObstacle(bool value) {
 			isObstacle = value;
 		}
+		bool IsKey()const {
+			return isKey;
+		}
+		void SetIsKey(bool value) {
+			isKey = value;
+		}
+		bool IsEnemy1()const {
+			return isEnemy1;
+		}
+		void SetIsEnemy1(bool value) {
+			isEnemy1 = value;
+		}
+		bool IsGoose()const {
+			return isGoose;
+		}
+		void SetIsGoose(bool value) {
+			isGoose = value;
+		}
+		bool IsDoor1()const {
+			return isDoor1;
+		}
+		void SetIsDoor1(bool value) {
+			isDoor1 = value;
+		}
+		bool IsobbDoor()const {
+			return isobbDoor;
+		}
+		void SetIsobbDoor(bool value) {
+			isobbDoor = value;
+		}
+
 
 		Transform& GetTransform() {
 			return transform;
@@ -137,9 +171,14 @@ namespace NCL::CSC8503 {
 		bool        isStartArea;
 		bool isDoor1a;
 		bool isDoor1b;
+		bool isobbDoor;
 		bool isPortal1;
 		bool isPortal2;
 		bool isObstacle;
+		bool isKey;
+		bool isEnemy1;
+		bool isGoose;
+		bool isDoor1;
 		int			worldID;
 		std::string	name;
 

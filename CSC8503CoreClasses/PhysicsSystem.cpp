@@ -10,12 +10,14 @@
 #include "Window.h"
 #include <functional>
 #include <PositionConstraint.h>
+#include <HingeConstraint.h>
+#include <HeightConstraint.h>
 using namespace NCL;
 using namespace CSC8503;
 
 PhysicsSystem::PhysicsSystem(GameWorld& g) : gameWorld(g)	{
 	applyGravity	= false;
-	useBroadPhase	= true;	
+	useBroadPhase	= false;	
 	dTOffset		= 0.0f;
 	globalDamping	= 0.995f;
 	SetGravity(Vector3(0.0f, -19.8f, 0.0f));
@@ -102,7 +104,10 @@ void PhysicsSystem::Update(float dt) {
 		}
 		else {
 			BasicCollisionDetection();
+			if (TPtime1 < 0)TPtime1 = 40;
+			if (TPtime2 < 0)TPtime2 = 40;
 		}
+		
 
 		//This is our simple iterative solver - 
 		//we just run things multiple times, slowly moving things forward
@@ -219,14 +224,156 @@ void PhysicsSystem::BasicCollisionDetection() {
 			}
 			CollisionDetection::CollisionInfo info;
 			if (CollisionDetection::ObjectIntersection(*i, *j, info)) {
+				bool isCoinA = info.a->IsCoin();
+				bool isCoinB = info.b->IsCoin();
+				bool isPlayerA = info.a->IsPlayer();
+				bool isPlayerB = info.b->IsPlayer();
+				bool isStartAreaA = info.a->IsStartArea();
+				bool isStartAreaB = info.b->IsStartArea();
+				bool isTargetA = info.a->IsTarget();
+				bool isTargetB = info.b->IsTarget();
+				bool isPortal1A = info.a->IsPortal1();
+				bool isPortal1B = info.b->IsPortal1();
+				bool isPortal2A = info.a->IsPortal2();
+				bool isPortal2B = info.b->IsPortal2();
+				bool isKeyA = info.a->IsKey();
+				bool isKeyB = info.b->IsKey();
+				bool isObstalceA = info.a->IsObstacle();
+				bool isObstalceB = info.b->IsObstacle();
+				bool isEnemy1A = info.a->IsEnemy1();
+				bool isEnemy1B = info.b->IsEnemy1();
+				bool isGooseA = info.a->IsGoose();
+				bool isGooseB = info.b->IsGoose();
+				bool isDoor1A = info.a->IsDoor1();
+				bool isDoor1B = info.b->IsDoor1();
+				bool isobbDoorA = info.a->IsobbDoor();
+				bool isobbDoorB = info.b->IsobbDoor();
+				if ((isDoor1A && isGooseB) || (isGooseA && isDoor1B)) {
+					SetGooseDoor(true);
+					if (isGooseB) {
+						info.b->GetTransform().SetPosition(Vector3(0, -17, 60));
+					}
+					if (isGooseA) {
+						info.a->GetTransform().SetPosition(Vector3(0, -17, 60));
+					}
+				}
+
+				if ((isobbDoorA && isPlayerB) || (isobbDoorB && isPlayerA)) {
+					if (isobbDoorA) {
+						info.a->GetTransform().SetOrientation((Quaternion(Matrix4::Rotation(-90, Vector3(0, 1, 0)))));
+					}
+					if (isobbDoorB) {
+						info.b->GetTransform().SetOrientation((Quaternion(Matrix4::Rotation(-90, Vector3(0, 1, 0)))));
+					}
+				}
+
+				if ((isPlayerA && isEnemy1B) || (isPlayerB && isEnemy1A)) {
+					winorlose--;
+				}
+				if ((isPlayerA && isObstalceB) || (isObstalceA && isPlayerB)) {
+					if (info.a->IsActive() && isObstalceA&&Key>=1) {
+						info.a->SetIsActive(false);
+						info.a->GetTransform().SetPosition(Vector3(40, -40, -40));
+						Key--;
+					}
+					if (info.b->IsActive() && isObstalceB && Key >= 1) {
+						info.b->SetIsActive(false);
+						info.b->GetTransform().SetPosition(Vector3(40, -40, -40));
+						Key--;
+					}
+				}
+				if ((isKeyA && isPlayerB) || (isKeyB && isPlayerA)) {
+					
+					if (info.a->IsActive()&&isKeyA){
+						info.a->SetIsActive(false);
+						Key++;
+					}
+					if (info.b->IsActive()&&isKeyB) {
+						info.b->SetIsActive(false);
+						Key++;
+					}
+
+				}
+				if ((isPortal1A && isPlayerB) || (isPortal1B && isPlayerA)) {
+					Debug::Print("you will tp to portal2 when number till 0,number=" + std::to_string(TPtime1), Vector2(0, 50), Debug::RED);
+					TPtime1 = TPtime1 - 1;
+					if (isPlayerB && TPtime1 == 0) {
+						info.b->GetTransform().SetPosition(Vector3(-80, 0, -80));
+					}
+
+					if (isPlayerA && TPtime1 == 0) {
+						info.a->GetTransform().SetPosition(Vector3(-80, 0, -80));
+					}
+
+				}
+
+				if ((isPortal2A && isPlayerB) || (isPortal2B && isPlayerA)) {
+					Debug::Print("you will tp to portal1 when number till 0,number=" + std::to_string(TPtime2), Vector2(0, 50), Debug::RED);
+					TPtime2 = TPtime2 - 1;
+					if (isPlayerB && TPtime2 == 0) {
+						info.b->GetTransform().SetPosition(Vector3(-40, 0, 60));
+					}
+					if (isPlayerA && TPtime2 == 0) {
+						info.a->GetTransform().SetPosition(Vector3(-40, 0, 60));
+					}
+				}
+				if ((isStartAreaA && isTargetB) || (isStartAreaB && isTargetA)) {
+					winorlose++;
+				}
+
+				if ((isCoinA && isPlayerB) || (isPlayerA && isCoinB)) {
+					//info.framesLeft = numCollisionFrames;
+					//ImpulseResolveCollision(*info.a, *info.b, info.point);
+					//allCollisions.insert(info);//insert into our main set
+					if (info.a->IsActive() && isCoinA) {
+						info.a->SetIsActive(false);
+						/*gameWorld.RemoveGameObject(info.a);*/
+						fraction++;
+						destroynum--;
+					}
+					if (info.b->IsActive() && isCoinB) {
+						info.b->SetIsActive(false);
+						/*gameWorld.RemoveGameObject(info.b);*/
+						fraction++;
+						destroynum--;
+					}
+				}
+				if ((isCoinA && isGooseB) || (isGooseA && isCoinB)) {
+					if (info.a->IsActive() && isCoinA) {
+						info.a->SetIsActive(false);
+						GooseScore++;
+						destroynum--;
+					}
+					if (info.b->IsActive() && isCoinB) {
+						info.b->SetIsActive(false);
+						GooseScore++;
+						destroynum--;
+					}
+				}
+
+				if ((isPlayerA && isGooseB) || (isGooseA && isPlayerB)) {
+					SetGoosePlayer(true);
+					GooseScore += fraction;
+					fraction = 0;
+					Debug::Print("The goose stole your coins!", Vector2(0, 50), Debug::RED);
+				}
 				/*std::cout << "Collision between " << (*i)->GetName() << " and " << (*j)->GetName() << std::endl;*/
 				ImpulseResolveCollision(*info.a, *info.b, info.point);
 				info.framesLeft = numCollisionFrames;
 				allCollisions.insert(info);
 			}
-
+			
+			
 		}
+		if (winorlose >= 1) { Debug::Print("Your Win!", Vector2(40, 50), Debug::RED); }
+		if (winorlose < 0) { Debug::Print("Your Lose!", Vector2(40, 50), Debug::RED); }
+		Debug::Print("Key :" + std::to_string(Key), Vector2(0, 20), Debug::RED);
+		Debug::Print("Your fraction is :" + std::to_string(fraction), Vector2(0, 10), Debug::RED);
+		Debug::Print("Goose score is :" + std::to_string(GooseScore), Vector2(0, 30), Debug::RED);
+		Debug::Print("left destroyable items :" + std::to_string(destroynum), Vector2(50, 10), Debug::RED);
 	}
+	
+	
 }
 
 /*
