@@ -73,6 +73,7 @@ namespace NCL::Maths {
 			return v;
 		}
 
+
 		static Vector3 Clamp(const Vector3& input, const Vector3& mins, const Vector3& maxs);
 
 		static constexpr float	Dot(const Vector3& a, const Vector3& b) {

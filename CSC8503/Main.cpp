@@ -240,13 +240,14 @@ class IntroScreen :public PushdownState {
 	}
 };
 
-void TestPushdownAutomata(Window* w) {
+void TestPushdownAutomata(Window* w,TutorialGame* g) {
 	PushdownMachine machine(new IntroScreen());
 	while (w->UpdateWindow()) {
 		float dt = w->GetTimer().GetTimeDeltaSeconds();
 		if (!machine.Update(dt)) {
 			return;
 		}
+		g->UpdateGame(dt);
 	}
 }
 
@@ -298,7 +299,6 @@ hide or show the
 */
 int main() {
 	Window*w = Window::CreateGameWindow("CSC8503 Game technology!", 1920, 1200,true);
-	/*TestPushdownAutomata(w);*/
 	if (!w->HasInitialised()) {
 		return -1;
 	}	
@@ -314,6 +314,7 @@ int main() {
 	
 	while (w->UpdateWindow() && !Window::GetKeyboard()->KeyDown(KeyCodes::ESCAPE)) {
 		float dt = w->GetTimer().GetTimeDeltaSeconds();
+		/*TestPushdownAutomata(w,g);*/
 		/*TestBehaviourTree();*/
 		if (dt > 0.1f) {
 			std::cout << "Skipping large time delta" << std::endl;

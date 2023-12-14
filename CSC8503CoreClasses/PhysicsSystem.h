@@ -5,6 +5,12 @@ namespace NCL {
 	namespace CSC8503 {
 		class PhysicsSystem	{
 		public:
+			int mode = 1;
+			int Key = 0;
+			int winorlose = 0;
+			int fraction = 0;
+			int GooseScore = 0;
+			int destroynum = 23;
 			void SetGooseDoor(bool value) {
 				GooseDoor = value;
 			}
@@ -62,15 +68,14 @@ namespace NCL {
 			std::vector<CollisionDetection::CollisionInfo> broadphaseCollisionsVec;
 			bool useBroadPhase		= true;
 			int numCollisionFrames	= 5;
-			int fraction = 0;
-			int GooseScore = 0;
-			int destroynum = 9;
+			
+			
 			int TPtime1 = 40;
 			int TPtime2 = 40;
-			int Key = 0;
-			int winorlose = 0;
+			
 			bool GooseDoor = false;
 			bool GoosePlayer = false;
+			float totaltime = 0.0f;
 			
 		};
 	}

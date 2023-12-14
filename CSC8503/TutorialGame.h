@@ -12,6 +12,7 @@
 #include "BehaviourSelector.h"
 #include "BehaviourSequence.h"
 #include "BehaviourAction.h"
+#include"PositionConstraint.h"
 
 namespace NCL {
 	namespace CSC8503 {
@@ -19,14 +20,9 @@ namespace NCL {
 		public:
 			TutorialGame();
 			~TutorialGame();
-
-			
-
 			virtual void UpdateGame(float dt);
-
-			/*void SetEndGame(bool s) { gameEnded = s; }
-			bool GetEndGame() { return gameEnded; }*/
 			BehaviourSequence* rootSequence; 
+			bool isTimeMode = false;
 		protected:
 			//statemachine
 			StateGameObject* AddStateObjectToWorld(const Vector3& position);
@@ -62,6 +58,8 @@ namespace NCL {
 
 			void InitDefaultFloor();
 
+			void MoveObject(const Vector3& direction);
+			void UpdateObjectOrientation(const Vector3& direction);
 
 			bool SelectObject();
 			void MoveSelectedObject();
@@ -70,6 +68,7 @@ namespace NCL {
 			void BridgeConstraintTest();
 			void GooseBehaviourTree();
 			void UpdateObjectRotation(GameObject* obj);
+			void GrapplingHook();
 			GameObject* AddFloorToWorld(const Vector3& position);
 			GameObject* SetStartArea();
 			GameObject* SetPortal1();
@@ -138,6 +137,7 @@ namespace NCL {
 			/*bool gameEnded = false;*/
 			float totaltime = 0.0f;
 			BehaviourState state;
+			bool p = true;
 			
 		};
 	}

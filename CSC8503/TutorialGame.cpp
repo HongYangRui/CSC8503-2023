@@ -96,9 +96,9 @@ void TutorialGame::UPdateConstarin() {
 }
 
 void TutorialGame::UpdateGame(float dt) {
+	UpdateColor(player, Debug::YELLOW);
 	UPdateConstarin();
-	totaltime += dt;
-	Debug::Print("Spent time:" + std::to_string(totaltime), Vector2(60, 20), Debug::RED);
+	/*GrapplingHook();*/
 	//statemachine
 	/*GoosePathfinding();*/
 
@@ -115,28 +115,27 @@ void TutorialGame::UpdateGame(float dt) {
 	}
 	if (lockedObject != nullptr) {
 		Vector3 objPos = lockedObject->GetTransform().GetPosition();
-		Vector3 camPos = objPos + lockedOffset;
 
-		Matrix4 temp = Matrix4::BuildViewMatrix(camPos, objPos, Vector3(0,1,0));
+		Quaternion objOrientation = lockedObject->GetTransform().GetOrientation();
+		Vector3 relativeOffset(0.0f, 5.0f, 15.0f);
+		Vector3 camOffset = objOrientation * relativeOffset;
+		world->GetMainCamera().SetPosition(objPos + camOffset);
+		world->GetMainCamera().SetPitch(objOrientation.ToEuler().x - 12.0f);
+		world->GetMainCamera().SetYaw(objOrientation.ToEuler().y);
 
-		Matrix4 modelMat = temp.Inverse();
-
-		Quaternion q(modelMat);
-		Vector3 angles = q.ToEuler(); //nearly there now!
-
-		world->GetMainCamera().SetPosition(camPos);
-		world->GetMainCamera().SetPitch(angles.x);
-		world->GetMainCamera().SetYaw(angles.y);
+		//Vector3 camPos = objPos + lockedOffset;
+		//Matrix4 temp = Matrix4::BuildViewMatrix(camPos, objPos, Vector3(0,1,0));
+		//Matrix4 modelMat = temp.Inverse();
+		//Quaternion q(modelMat);
+		//Vector3 angles = q.ToEuler(); //nearly there now!
+		//world->GetMainCamera().SetPosition(camPos);
+		//world->GetMainCamera().SetPitch(angles.x);
+		//world->GetMainCamera().SetYaw(angles.y);
 	}
 
 	UpdateKeys();
 
-	if (useGravity) {
-		Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
-	}
-	else {
-		Debug::Print("(G)ravity off", Vector2(5, 95), Debug::RED);
-	}
+
 
 	RayCollision closestCollision;
 	if (Window::GetKeyboard()->KeyPressed(KeyCodes::K) && selectionObject) {
@@ -158,30 +157,73 @@ void TutorialGame::UpdateGame(float dt) {
 			objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
 		}
 	}
-	    Vector3 AiPos;
-		Vector3 AiDir;
-		AiDir = Goose->GetTransform().GetOrientation()*Vector3(1,1,1);
-		AiPos=Goose-> GetTransform().GetPosition();
-		Ray ai = Ray(AiPos,AiDir);
-		if(world->Raycast(ai,closestCollision,true, target)) {
-			if (objClosest) {
-				objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
-			}
-			objClosest = (GameObject*)closestCollision.node;
-			objClosest->GetRenderObject()->SetColour(Vector4(1, 0, 1, 1));
-		}
-		Debug::DrawLine(AiPos, player->GetTransform().GetPosition(), Vector4(1,0,1,1));
+	Vector3 AiPos;
+	Vector3 TgPos;
+	TgPos = target->GetTransform().GetPosition();
+	AiPos = Goose->GetTransform().GetPosition();
+	Ray ai = Ray(AiPos, TgPos - AiPos);
+	Debug::DrawLine(AiPos, TgPos, Vector4(1, 0, 1, 1));
 
 	Debug::DrawLine(Vector3(), Vector3(0, 100, 0), Vector4(1, 0, 0, 1));
 	//Debug::DrawLine(Vector3(), Vector3(100, 0, 0), Vector4(0, 1, 0, 1));
 	//Debug::DrawLine(Vector3(), Vector3(0, 0, 100), Vector4(0, 0, 1, 1));
-	SelectObject();
-	MoveSelectedObject();
+	if (p == false) {
+		SelectObject();
+		MoveSelectedObject();
+		world->UpdateWorld(dt);
+		physics->Update(dt);
+		totaltime += dt;
+		Debug::Print("Spent time:" + std::to_string(totaltime), Vector2(60, 20), Debug::RED);
+		if (useGravity) {
+			Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
+		}
+		else {
+			Debug::Print("(G)ravity off", Vector2(5, 95), Debug::RED);
+		}
+		if (physics->mode == 2) {
+			p = true;
+		}
+		if (physics->mode == 3) {
+			p = true;
+		}
+		if (totaltime >= 10&&isTimeMode) {
+			physics->mode = 3;
+			p = true;
+		}
+	}
+	if (p == true) {
+		if (physics->mode == 1) {
+			Debug::Print("Press 2 to start survial mode", Vector2(20, 40), Debug::RED);
+			Debug::Print("Press 3 to start timekeeping mode", Vector2(20, 50), Debug::RED);
+			if (Window::GetKeyboard()->KeyPressed(KeyCodes::SPACE)) {
+				/*isTimeMode = false;
+				p = false;*/
+			}
+			if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM2)) {
+				isTimeMode = true;
+				p = false;
+			}
+		}
+		 if (physics->mode != 1 && physics->mode != 2 && physics->mode != 3) {
+			Debug::Print("Pause", Vector2(45, 45), Debug::RED);
+			Debug::Print("Press P to continue", Vector2(30, 60), Debug::RED);
+		}
 
-	world->UpdateWorld(dt);
+		 if (physics->mode == 2) {
+			 Debug::Print("You win~!", Vector2(40, 40), Debug::RED);
+			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::RED);
+			 Debug::Print("Press F1 to restart", Vector2(30, 60), Debug::RED);
+			 Debug::Print("Your score is  " + std::to_string(physics->fraction), Vector2(30, 70), Debug::RED);
+		 }
+		 if (physics->mode == 3) {
+			 Debug::Print("You lose~!", Vector2(40, 40), Debug::RED);
+			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::RED);
+			 Debug::Print("Press F1 to restart", Vector2(30, 60), Debug::RED);
+			 Debug::Print("Your score is  "+std::to_string(physics->fraction), Vector2(30, 70), Debug::RED);
+		 }
+	}
+	 
 	renderer->Update(dt);
-	physics->Update(dt);
-
 	renderer->Render();
 	Debug::UpdateRenderables(dt);
 	
@@ -191,12 +233,25 @@ void TutorialGame::UpdateKeys() {
 	if (Window::GetKeyboard()->KeyPressed(KeyCodes::F1)) {
 		InitWorld(); //We can reset the simulation at any time with F1
 		selectionObject = nullptr;
+		physics->winorlose = 0;
+		physics->mode = 1;
+		p = true;
+		totaltime = 0;
+		physics->fraction = 0;
+		physics->Key = 0;
+		physics->GooseScore = 0;
+		physics->destroynum = 23;
+		GooseBehaviourTree();
+		isTimeMode = false;
 	}
 
 	if (Window::GetKeyboard()->KeyPressed(KeyCodes::F2)) {
 		InitCamera(); //F2 will reset the camera to a specific default place
 	}
-
+	
+	if (Window::GetKeyboard()->KeyPressed(KeyCodes::P)) {
+		p = !p;
+	}
 	if (Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {
 		useGravity = !useGravity; //Toggle gravity!
 		physics->UseGravity(useGravity);
@@ -230,45 +285,80 @@ void TutorialGame::UpdateKeys() {
 }
 
 void TutorialGame::LockedObjectMovement() {
-	Matrix4 view		= world->GetMainCamera().BuildViewMatrix();
-	Matrix4 camWorld	= view.Inverse();
+	//Matrix4 view		= world->GetMainCamera().BuildViewMatrix();
+	//Matrix4 camWorld	= view.Inverse();
 
-	Vector3 rightAxis = Vector3(camWorld.GetColumn(0)); //view is inverse of model!
+	//Vector3 rightAxis = Vector3(camWorld.GetColumn(0)); //view is inverse of model!
 
 	//forward is more tricky -  camera forward is 'into' the screen...
 	//so we can take a guess, and use the cross of straight up, and
 	//the right axis, to hopefully get a vector that's good enough!
 
-	Vector3 fwdAxis = Vector3::Cross(Vector3(0, 1, 0), rightAxis);
-	fwdAxis.y = 0.0f;
-	fwdAxis.Normalise();
+	//Vector3 fwdAxis = Vector3::Cross(Vector3(0, 1, 0), rightAxis);
+	//fwdAxis.y = 0.0f;
+	//fwdAxis.Normalise();
 
+	//if (Window::GetKeyboard()->KeyDown(KeyCodes::W)) { 
+	//	selectionObject->GetPhysicsObject()->AddForce(fwdAxis*10);
+	//	selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(0, Vector3(0, 1, 0))));
+	//}
 
-	if (Window::GetKeyboard()->KeyDown(KeyCodes::W)) { 
-		selectionObject->GetPhysicsObject()->AddForce(fwdAxis*10);
-		selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(0, Vector3(0, 1, 0))));
+	//if (Window::GetKeyboard()->KeyDown(KeyCodes::S)) {
+	//	selectionObject->GetPhysicsObject()->AddForce(-fwdAxis*10);
+	//	selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(-180, Vector3(0, 1, 0))));
+	//}
+	//if (Window::GetKeyboard()->KeyDown(KeyCodes::A)) {
+	//	selectionObject->GetPhysicsObject()->AddForce(-rightAxis*10);
+	//	selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(90, Vector3(0, 1, 0))));
+	//	
+	//}
+
+	//if (Window::GetKeyboard()->KeyDown(KeyCodes::D)) {
+	//	selectionObject->GetPhysicsObject()->AddForce(rightAxis*10);
+	//	selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(-90, Vector3(0, 1, 0))));
+	//}
+	Vector3 moveDirection(0, 0, 0);
+
+	if (Window::GetKeyboard()->KeyDown(KeyCodes::W)) {
+		moveDirection += Vector3(0, 0, -1); // Forward
 	}
-
 	if (Window::GetKeyboard()->KeyDown(KeyCodes::S)) {
-		selectionObject->GetPhysicsObject()->AddForce(-fwdAxis*10);
-		selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(-180, Vector3(0, 1, 0))));
+		moveDirection += Vector3(0, 0, 1); // Backward
 	}
 	if (Window::GetKeyboard()->KeyDown(KeyCodes::A)) {
-		selectionObject->GetPhysicsObject()->AddForce(-rightAxis*10);
-		selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(90, Vector3(0, 1, 0))));
-		
+		moveDirection += Vector3(-1, 0, 0); // Left
 	}
-
 	if (Window::GetKeyboard()->KeyDown(KeyCodes::D)) {
-		selectionObject->GetPhysicsObject()->AddForce(rightAxis*10);
-		selectionObject->GetTransform().SetOrientation(Quaternion(Matrix4::Rotation(-90, Vector3(0, 1, 0))));
-	}
-	if (Window::GetKeyboard()->KeyDown(KeyCodes::NEXT)) {
-		selectionObject->GetPhysicsObject()->AddForce(Vector3(0,-10,0));
+		moveDirection += Vector3(1, 0, 0); // Right
 	}
 
-	
-	
+	if (moveDirection.LengthSquared() > 0) {
+		MoveObject(moveDirection.Normalised());
+	}
+}
+
+void TutorialGame::MoveObject(const Vector3& direction) {
+	if (!selectionObject) {
+		return;
+	}
+
+	Transform& objectTransform = selectionObject->GetTransform();
+	Vector3 currentPosition = objectTransform.GetPosition();
+	Vector3 newPosition = currentPosition + direction * 0.06f;
+	objectTransform.SetPosition(newPosition);
+
+	UpdateObjectOrientation(direction);
+}
+
+void TutorialGame::UpdateObjectOrientation(const Vector3& direction) {
+	if (direction.LengthSquared() > 0) {
+		float angleY = atan2(direction.x, direction.z);
+		Quaternion newOrientation(0, cos(angleY / 2.0f), 0, -sin(angleY / 2.0f));
+		Quaternion currentOrientation = selectionObject->GetTransform().GetOrientation();
+		float lerpFactor = 0.012f;
+		Quaternion finalOrientation = Quaternion::Lerp(currentOrientation, newOrientation, lerpFactor);
+		selectionObject->GetTransform().SetOrientation(finalOrientation);
+	}
 }
 
 void TutorialGame::DebugObjectMovement() {
@@ -776,11 +866,11 @@ void TutorialGame::GenerateMazeBuilding() {
 	std::vector<std::string> mazeBlueprint = { 
 		"11111111111",
 		"10101222221", 
-		"10101211121", 
-		"10101200121", 
-		"10122210121",
+		"12101211121", 
+		"12101222121", 
+		"12122210121",
 		"10121110121", 
-		"10101002101", 
+		"10101202101", 
 		"10111011111", 
 		"10120000001",
 		"10122000001",
@@ -982,7 +1072,7 @@ void TutorialGame::GooseBehaviourTree() {
 		else if (state == Ongoing) {
 			behaviourTimer -= dt;
 			Debug::Print("Awake!", Goose->GetTransform().GetPosition());
-			if (behaviourTimer <= 0.0f) {
+			if (behaviourTimer <= 0.0f||totaltime>=1) {
 				std::cout << "awake!\n";
 				
 				return Success;

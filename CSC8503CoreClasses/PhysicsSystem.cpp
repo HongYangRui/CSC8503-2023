@@ -16,7 +16,7 @@ using namespace NCL;
 using namespace CSC8503;
 
 PhysicsSystem::PhysicsSystem(GameWorld& g) : gameWorld(g)	{
-	applyGravity	= false;
+	applyGravity	= true;
 	useBroadPhase	= false;	
 	dTOffset		= 0.0f;
 	globalDamping	= 0.995f;
@@ -318,7 +318,17 @@ void PhysicsSystem::BasicCollisionDetection() {
 					}
 				}
 				if ((isStartAreaA && isTargetB) || (isStartAreaB && isTargetA)) {
-					winorlose++;
+					if(isTargetA&&info.a->IsActive()){
+						winorlose++;
+						fraction += 100;
+						info.a->SetIsActive(false);
+					}
+					if (isTargetB && info.b->IsActive()) {
+						winorlose++;
+						fraction += 100;
+						info.b->SetIsActive(false);
+					}
+					
 				}
 
 				if ((isCoinA && isPlayerB) || (isPlayerA && isCoinB)) {
@@ -365,8 +375,13 @@ void PhysicsSystem::BasicCollisionDetection() {
 			
 			
 		}
-		if (winorlose >= 1) { Debug::Print("Your Win!", Vector2(40, 50), Debug::RED); }
-		if (winorlose < 0) { Debug::Print("Your Lose!", Vector2(40, 50), Debug::RED); }
+		if (winorlose > 0) { 
+			mode = 2;
+		}
+		if (winorlose < 0) { 
+			
+			mode = 3;
+		}
 		Debug::Print("Key :" + std::to_string(Key), Vector2(0, 20), Debug::RED);
 		Debug::Print("Your fraction is :" + std::to_string(fraction), Vector2(0, 10), Debug::RED);
 		Debug::Print("Goose score is :" + std::to_string(GooseScore), Vector2(0, 30), Debug::RED);
@@ -609,6 +624,17 @@ void PhysicsSystem::IntegrateVelocity(float dt) {
 		transform.SetPosition(position);
 		//Linear Damping
 		linearVel = linearVel * frameLinearDamping;
+		if (object->GetInverseMass() != 0.0f && position.y <= 0.0f) {
+			float frictional = 0.01f / object->GetInverseMass();
+			Vector3 ds = linearVel.Normalised();
+			ds = ds * frictional;
+			if (linearVel.Length() > ds.Length()) {
+				linearVel = linearVel - ds;
+			}
+			else {
+				linearVel = Vector3(0, 0, 0);
+			}
+		}
 		object->SetLinearVelocity(linearVel);
 
 		//Orientation stuff
