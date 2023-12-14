@@ -168,6 +168,7 @@ void TutorialGame::UpdateGame(float dt) {
 	//Debug::DrawLine(Vector3(), Vector3(100, 0, 0), Vector4(0, 1, 0, 1));
 	//Debug::DrawLine(Vector3(), Vector3(0, 0, 100), Vector4(0, 0, 1, 1));
 	if (p == false) {
+		physics->mode = 0;
 		SelectObject();
 		MoveSelectedObject();
 		world->UpdateWorld(dt);
@@ -193,33 +194,41 @@ void TutorialGame::UpdateGame(float dt) {
 	}
 	if (p == true) {
 		if (physics->mode == 1) {
-			Debug::Print("Press 2 to start survial mode", Vector2(20, 40), Debug::RED);
-			Debug::Print("Press 3 to start timekeeping mode", Vector2(20, 50), Debug::RED);
-			if (Window::GetKeyboard()->KeyPressed(KeyCodes::SPACE)) {
-				/*isTimeMode = false;
-				p = false;*/
+			Debug::Print("Press 1 to start survial mode", Vector2(20, 40), Debug::RED);
+			Debug::Print("Press 2 to start timekeeping mode", Vector2(20, 50), Debug::BLACK);
+			Debug::Print("Press ESC to quit", Vector2(30, 60), Debug::BLUE);
+			Debug::Print("Press F1 to main", Vector2(30, 70), Debug::CYAN);
+
+
+			if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM1)) {
+				isTimeMode = false;
+				p = false;
 			}
+
 			if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM2)) {
 				isTimeMode = true;
 				p = false;
 			}
+
 		}
 		 if (physics->mode != 1 && physics->mode != 2 && physics->mode != 3) {
 			Debug::Print("Pause", Vector2(45, 45), Debug::RED);
-			Debug::Print("Press P to continue", Vector2(30, 60), Debug::RED);
+			Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::BLACK);
+			Debug::Print("Press P to continue", Vector2(30, 60), Debug::BLUE);
+			Debug::Print("Press F1 to main", Vector2(30, 70), Debug::CYAN);
 		}
 
 		 if (physics->mode == 2) {
 			 Debug::Print("You win~!", Vector2(40, 40), Debug::RED);
-			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::RED);
-			 Debug::Print("Press F1 to restart", Vector2(30, 60), Debug::RED);
-			 Debug::Print("Your score is  " + std::to_string(physics->fraction), Vector2(30, 70), Debug::RED);
+			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::BLACK);
+			 Debug::Print("Press F1 to main", Vector2(30, 60), Debug::BLUE);
+			 Debug::Print("Your score is  " + std::to_string(physics->fraction), Vector2(30, 70), Debug::CYAN);
 		 }
 		 if (physics->mode == 3) {
 			 Debug::Print("You lose~!", Vector2(40, 40), Debug::RED);
-			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::RED);
-			 Debug::Print("Press F1 to restart", Vector2(30, 60), Debug::RED);
-			 Debug::Print("Your score is  "+std::to_string(physics->fraction), Vector2(30, 70), Debug::RED);
+			 Debug::Print("Press ESC to quit", Vector2(30, 50), Debug::BLACK);
+			 Debug::Print("Press F1 to main", Vector2(30, 60), Debug::BLUE);
+			 Debug::Print("Your score is  "+std::to_string(physics->fraction), Vector2(30, 70), Debug::CYAN);
 		 }
 	}
 	 

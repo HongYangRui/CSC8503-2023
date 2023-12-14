@@ -1,9 +1,5 @@
 ﻿  Scanning sources for module dependencies...
-  Main.cpp
-  NetworkPlayer.cpp
-  NetworkedGame.cpp
   TutorialGame.cpp
-C:\Users\c2013448\CSC8503 2023\CSC8503\TutorialGame.cpp(1102,10): warning C4553: '==': result of expression not used; did you intend '='?
-C:\Users\c2013448\CSC8503 2023\CSC8503\TutorialGame.cpp(1064,8): warning C4101: 'distanceTotarget': unreferenced local variable
-  Generating Code...
+C:\Users\c2013448\CSC8503 2023\CSC8503\TutorialGame.cpp(1111,10): warning C4553: '==': result of expression not used; did you intend '='?
+C:\Users\c2013448\CSC8503 2023\CSC8503\TutorialGame.cpp(1073,8): warning C4101: 'distanceTotarget': unreferenced local variable
   CSC8503.vcxproj -> C:\Users\c2013448\CSC8503 2023\x64\Debug\CSC8503.exe
