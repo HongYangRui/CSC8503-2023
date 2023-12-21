@@ -797,6 +797,8 @@ void TutorialGame::InitGameExamples() {
 	AddSphereToWorld(Vector3(65, -15, 65), 1.0f, 1.0f);
 	AddCapsuleToWorld(Vector3(70, -15,60), 2.0f, 1.0f, 1.0f);
 	AddCapsuleToWorld(Vector3(70, -15, 65), 2.0f, 1.0f, 1.0f);
+	OBB1=AddOBBCubeToWorld(Vector3(75, -15, 60), Vector3(4, 1, 1), 0.5f);
+	OBB2=AddOBBCubeToWorld(Vector3(75, -15, 65), Vector3(4, 1, 1), 0.5f);
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

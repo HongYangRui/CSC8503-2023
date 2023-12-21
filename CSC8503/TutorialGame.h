@@ -134,6 +134,8 @@ namespace NCL {
 			GameObject* portal1;
 			GameObject* portal2;
 			GameObject* Goose;
+			GameObject* OBB1;
+			GameObject* OBB2;
 			/*bool gameEnded = false;*/
 			float totaltime = 0.0f;
 			BehaviourState state;
