@@ -272,21 +272,30 @@ void TestNetworking() {
 	TestPacketReceiver clientReceiver1("Client1");
 	TestPacketReceiver clientReceiver2("Client2");
 	int port = NetworkBase::GetDefaultPort();
-	GameServer* server = new GameServer(port, 4);
+	GameServer* server = new GameServer(port, 2);
 	GameClient* client1 = new GameClient();
 	GameClient* client2 = new GameClient();
+	
 	server->RegisterPacketHandler(String_Message, &serverReceiver);
 	client1->RegisterPacketHandler(String_Message, &clientReceiver1);
 	client2->RegisterPacketHandler(String_Message, &clientReceiver2);
 	bool canConnect1 = client1->Connect(127, 0, 0, 1, port);
 	bool canConnect2 = client2->Connect(127, 0, 0, 1, port);
+	
+
 	for (int i = 0; i < 100; ++i) {
+		if (canConnect1) {
+			std::cout << "000";
+		}
+		else {
+			std::cout << "111";
+		}
 		//server->SendGlobalPacket(StringPacket("Server says hello!" + std::to_string(i)));
 		server->SendGlobalPacket((GamePacket&)StringPacket("Server says hello!" + std::to_string(i)));
 		/*client->SendPacket(StringPacket("Client says hello!" + std::to_string(i)));*/
-		client1->SendPacket((GamePacket&)StringPacket("Client says hello!" + std::to_string(i)));
+		client1->SendPacket((GamePacket&)StringPacket("Client1 says hello!" + std::to_string(i)));
 		
-		client2->SendPacket((GamePacket&)StringPacket("Client says hello!" + std::to_string(i)));
+		client2->SendPacket((GamePacket&)StringPacket("Client2 says hello!" + std::to_string(i)));
 
 		server->UpdateServer();
 		client1->UpdateClient();
@@ -308,7 +317,7 @@ hide or show the
 
 */
 int main() {
-	Window*w = Window::CreateGameWindow("CSC8503 Game technology!", 1920, 1200,true);
+	Window*w = Window::CreateGameWindow("CSC8503 Game technology!", 960, 1200,false);
 	if (!w->HasInitialised()) {
 		return -1;
 	}	
