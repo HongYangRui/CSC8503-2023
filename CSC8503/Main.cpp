@@ -284,12 +284,6 @@ void TestNetworking() {
 	
 
 	for (int i = 0; i < 100; ++i) {
-		if (canConnect1) {
-			std::cout << "000";
-		}
-		else {
-			std::cout << "111";
-		}
 		//server->SendGlobalPacket(StringPacket("Server says hello!" + std::to_string(i)));
 		server->SendGlobalPacket((GamePacket&)StringPacket("Server says hello!" + std::to_string(i)));
 		/*client->SendPacket(StringPacket("Client says hello!" + std::to_string(i)));*/
