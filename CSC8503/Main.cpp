@@ -272,7 +272,7 @@ void TestNetworking() {
 	TestPacketReceiver clientReceiver1("Client1");
 	TestPacketReceiver clientReceiver2("Client2");
 	int port = NetworkBase::GetDefaultPort();
-	GameServer* server = new GameServer(port, 2);
+	GameServer* server = new GameServer(port, 4);
 	GameClient* client1 = new GameClient();
 	GameClient* client2 = new GameClient();
 	
