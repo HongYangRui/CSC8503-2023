@@ -177,7 +177,17 @@ bool CollisionDetection::ObjectIntersection(GameObject* a, GameObject* b, Collis
 	Transform& transformB = b->GetTransform();
 
 	VolumeType pairType = (VolumeType)((int)volA->type | (int)volB->type);
-
+	//AABB vs OBB
+	if (volA->type == VolumeType::AABB && volB->type == VolumeType::OBB) {
+		return AABBOBBIntersection((AABBVolume&)*volA, transformA,
+			(OBBVolume&)*volB, transformB, collisionInfo);
+	}
+	if (volA->type == VolumeType::OBB && volB->type == VolumeType::AABB) {
+		collisionInfo.a = b;
+		collisionInfo.b = a;
+		return AABBOBBIntersection((AABBVolume&)*volB, transformB,
+			(OBBVolume&)*volA, transformA, collisionInfo);
+	}
 	//Two AABBs
 	if (pairType == VolumeType::AABB) {
 		return AABBIntersection((AABBVolume&)*volA, transformA, (AABBVolume&)*volB, transformB, collisionInfo);
@@ -490,6 +500,16 @@ Vector3 CollisionDetection::OBBSupport(const Transform& worldTransform, Vector3 
 	return (Matrix4::Scale(worldTransform.GetScale()) * worldTransform.GetOrientation() *
 		Matrix4::Translation(vertex)).GetPositionVector();
 }
+
+bool CollisionDetection::AABBOBBIntersection(const AABBVolume& volumeA, const Transform& worldTransformA,
+	const OBBVolume& volumeB, const Transform& worldTransformB, NCL::CollisionDetection::CollisionInfo& collisionInfo) {
+	// Transfrom AABB to OBB, because AABB is special OBB
+	OBBVolume obbVolumeA(volumeA.GetHalfDimensions());
+	Transform obbTransformA = worldTransformA; 
+	return OBBIntersection(obbVolumeA, obbTransformA, volumeB, worldTransformB, collisionInfo);
+}
+
+
 
 Matrix4 GenerateInverseView(const Camera &c) {
 	float pitch = c.GetPitch();
